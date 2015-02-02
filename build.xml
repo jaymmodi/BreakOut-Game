@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="default" name="${base.project.name}">
+
+	<!-- 
+  ########################################################################################
+  Global properties. These are used by all targets in this build file.
+  ########################################################################################-->
+
+	<!-- Base properties that will likely need to be changed when using this template for a different project -->
+	<property name="base.project.name" value="project-template" />
+	<property name="base.project.name.friendly" value="Team 1's A5" />
+	<property name="assignment.name" value="examples" />
+	<property name="code-root" value="." />
+	<property name="wwwroot" value="/u/kspace/www/fluency" />
+
+	<!-- Properties derived from the base properties above. Unlikely to change. -->
+	<property name="webstart.location" value="${wwwroot}/student-files/${assignment.name}/${base.project.name}/" />
+	<property name="dist.coverage.dir" value="${wwwroot}/coverage/${assignment.name}/${base.project.name}" />
+	
+	<property name="key.alias" value="fluencykey" />
+	<property name="key.pass" value="fluency" />
+	
+	<property name="project.build.home" value="${code-root}/bin" />
+	<property name="dist" value="${code-root}/dist" />
+	<property name="test" value="${code-root}/test" />
+	<property name="testclasses" value="${code-root}/testbin" />
+	<property name="classes" value="${code-root}/bin" />
+	<property name="src" value="${code-root}/src" />
+	<property name="lib" value="${code-root}/lib" />
+	<property name="webstart.home" value="${code-root}/webstart" />
+	<property name="key.store" value="${webstart.home}/projectKeystore" />
+
+	<property name="emma.dir" value="${lib}" />
+	<property name="dist.tests.dir" value="${dist}/tests" />
+	<property name="tests.data.dir" value="${dist.tests.dir}/data" />
+	<property name="tests.classes.instr.dir" value="${dist.tests.dir}/classes-instr" />
+	<property name="tests.includes" value="**/*Tester.class,**/*Test.class,**/*TestCase.class" />
+
+	<condition property="awt.toolkit.property" value="awt.toolkit">
+		<isset property="awt.toolkit" />
+	</condition>
+
+	<!-- 
+  ########################################################################################
+  Classpaths used throughout the different targets.
+  ########################################################################################-->
+	<path id="emma.lib">
+		<pathelement location="${emma.dir}/emma.jar" />
+		<pathelement location="${emma.dir}/emma_ant.jar" />
+	</path>
+
+	<path id="test.classpath">
+		<pathelement location="${tests.classes.instr.dir}" />
+		<path refid="compile.classpath" />
+		<pathelement location="${testclasses}" />
+		<pathelement location="${classes}" />
+	</path>
+
+	<path id="compile.classpath">
+		<fileset dir="${lib}" includes="**/*.jar" />
+	</path>
+
+	<!-- 
+  ########################################################################################
+  Basic targets for clean-up and compilation.
+  ########################################################################################-->
+	<target name="default" depends="all" />
+	<target name="all" depends="compile" description="Build everything" />
+
+	<target name="compile" depends="init">
+		<mkdir dir="${classes}" />
+		<javac debug="true" deprecation="true" destdir="${classes}" srcdir="${src}" fork="yes">
+			<classpath refid="compile.classpath" />
+		</javac>
+		<copy todir="${classes}">
+			<fileset dir="${src}" excludes="**/*.java" />
+		</copy>
+	</target>
+
+	<target name="init" depends="noop, clean" />
+	<target name="noop" description="Print project name">
+		<echo message="${base.project.name.friendly}" />
+	</target>
+
+	<target name="clean">
+		<delete dir="${classes}" />
+		<delete dir="${testclasses}" />
+		<delete dir="${dist}" />
+		<delete dir="${dist.coverage.dir}" />
+	</target>
+
+	<target name="jar" depends="compile" description="generate the distribution">
+		<mkdir dir="${dist}" />
+		<jar jarfile="${dist}/${base.project.name}.jar" basedir="${classes}">
+			<manifest>
+				<attribute name="Main-Class" value="view.MainView" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="run" depends="jar">
+		<java fork="true" classname="view.MainView">
+			<classpath>
+				<path location="${dist}/${base.project.name}.jar" />
+			</classpath>
+		</java>
+	</target>
+
+	<target name="run-tests-simple" depends="compile">
+		<echo level="info">Compiling tests...</echo>
+
+		<mkdir dir="${testclasses}" />
+		<javac sourcepath="" debug="true" deprecation="true" destdir="${testclasses}" srcdir="${test}" fork="yes">
+			<classpath refid="test.classpath" />
+			<include name="**/*.java" />
+			<exclude name="sandbox/**/*.java" />
+		</javac>
+
+		<echo level="info">Running tests...</echo>
+
+		<mkdir dir="${dist.tests.dir}" />
+		<mkdir dir="${tests.data.dir}" />
+
+		<path id="instr.path">
+			<pathelement location="${classes}" />
+			<pathelement location="${testclasses}" />
+		</path>
+
+		<junit printsummary="on" haltonfailure="false" fork="true" clonevm="true">
+			<classpath refid="test.classpath" />
+
+			<formatter type="brief" usefile="false" />
+			<formatter type="xml" />
+
+			<batchtest todir="${tests.data.dir}">
+				<fileset dir="${classes}" includes="${tests.includes}" />
+				<fileset dir="${testclasses}" includes="${tests.includes}" />
+			</batchtest>
+
+			<jvmarg value="-Demma.coverage.out.merge=true" />
+			<jvmarg value="-Demma.report.out.encoding=UTF-8" />
+			<jvmarg value="-Djava.awt.headless=${java.awt.headless}" />
+			<jvmarg value="-D${awt.toolkit.property}=${awt.toolkit}" />
+		</junit>
+	</target>
+
+	<!-- 
+  ########################################################################################
+  Bamboo compile targets. Bamboo automatically executes the deploy-all target on the server.
+  The Bamboo build consists of two basic sequences:
+  
+  1. Building the JUnit tests: 
+  		noop => clean => compile => compile-tests => run-tests
+		
+  2. Building the webstart app: 
+  		noop => clean => compile => build-webstart => deploy-webstart
+  ########################################################################################-->
+	<target name='deploy-all' depends='run-tests, deploy-webstart' />
+
+	<!--
+  ########################################
+  Webstart targets.
+  ########################################-->
+	<target name="deploy-webstart" depends="build-webstart" description="Deploy the webstart jar and jnlp to tintin. Called by tintin during automated build.">
+		<copy file="${base.project.name}.jar" toDir="${webstart.location}" />
+		<copy file="${webstart.home}/project.jnlp" toDir="${webstart.location}" />
+	</target>
+
+	<target name="build-webstart" depends="compile" description="Create a webstartable jar file">
+		<delete file="${base.project.name}.jar" />
+		<unzip src="${lib}/junit-4.8.2.jar" dest="${project.build.home}" />
+
+		<copy todir="${project.build.home}" flatten="false">
+			<fileset dir="${src}">
+				<include name="**/*.gif" />
+				<include name="**/*.jpg" />
+				<include name="**/*.png" />
+				<include name="**/*.wav" />
+			</fileset>
+		</copy>
+
+		<jar basedir="${project.build.home}" manifest="${webstart.home}/project.mf" compress="true" jarfile="${base.project.name}.jar" />
+
+		<signjar keystore="${key.store}" alias="${key.alias}" storepass="${key.pass}">
+			<fileset dir=".">
+				<include name="${base.project.name}.jar" />
+			</fileset>
+		</signjar>
+	</target>
+
+	<!--
+  ########################################
+  JUnit and Emma targets.
+  ########################################-->
+	<target name="compile-tests" depends="compile">
+		<mkdir dir="${testclasses}" />
+		<javac sourcepath="" debug="true" deprecation="true" destdir="${testclasses}" srcdir="${test}" fork="yes">
+			<classpath refid="test.classpath" />
+			<include name="**/*.java" />
+			<exclude name="sandbox/**/*.java" />
+		</javac>
+	</target>
+
+	<target name="run-tests" depends="init, compile-tests" description="runs the tests">
+		<echo level="info">Running tests...</echo>
+		<property name="emma.enabled" value="true" />
+		<property name="emma.encoding" value="UTF-8" />
+		<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
+
+		<mkdir dir="${dist.tests.dir}" />
+		<mkdir dir="${tests.data.dir}" />
+
+		<path id="instr.path">
+			<pathelement location="${classes}" />
+			<pathelement location="${testclasses}" />
+		</path>
+
+		<emma>
+			<instr instrpathref="instr.path" destdir="${tests.classes.instr.dir}" metadatafile="${dist.coverage.dir}/metadata.emma" merge="true">
+			</instr>
+		</emma>
+
+		<junit printsummary="on" haltonfailure="false" fork="true" clonevm="true">
+			<classpath refid="test.classpath" />
+
+			<formatter type="brief" usefile="false" />
+			<formatter type="xml" />
+
+			<batchtest todir="${tests.data.dir}">
+				<fileset dir="${classes}" includes="${tests.includes}" />
+				<fileset dir="${testclasses}" includes="${tests.includes}" />
+			</batchtest>
+
+			<jvmarg value="-Demma.coverage.out.file=${dist.coverage.dir}/coverage.emma" />
+			<jvmarg value="-Demma.coverage.out.merge=true" />
+			<jvmarg value="-Demma.report.out.encoding=UTF-8" />
+			<jvmarg value="-Djava.awt.headless=${java.awt.headless}" />
+			<jvmarg value="-D${awt.toolkit.property}=${awt.toolkit}" />
+		</junit>
+
+		<junitreport todir="${dist.tests.dir}">
+			<fileset dir="${tests.data.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${dist.tests.dir}" />
+		</junitreport>
+
+		<emma>
+			<report sourcepath="${src},${test}">
+				<fileset dir="${dist.coverage.dir}">
+					<include name="*.emma" />
+				</fileset>
+				<txt outfile="${dist.coverage.dir}/index.txt" />
+				<html outfile="${dist.coverage.dir}/index.html" />
+			</report>
+		</emma>
+
+	</target>
+</project>

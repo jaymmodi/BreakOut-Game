@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0+" codebase="http://fluency.knownspace.org/webstart/student-projects/fall2012/examples/team0-dnikolov/" href="project.jnlp">
+  <information>
+    <title>Hello World</title>
+    <vendor>P532</vendor>
+    <homepage href="http://fluency.knownspace.org/confluence" />
+    <description>Testing...</description>   
+    <description kind="short"></description>
+    <icon href="kslogo.gif" />
+  </information>
+  <offline-allowed />
+  <security>
+      <all-permissions />
+  </security>
+  <resources>
+    <j2se version="1.6+" />
+    <jar href="team0-dnikolov.jar" />
+  </resources>
+  <application-desc main-class="main.HelloWorld" />
+</jnlp>
