@@ -104,14 +104,14 @@ public class ComputeCoordinates implements Constants {
     }
 
     public ArrayList<Object> getUndoObjects(){
-    	ArrayList<Object> listObjects = new ArrayList<>();
+    	ArrayList<Object> listObjects = new ArrayList<Object>();
 		listObjects.add(this.getGameFlag());
 		listObjects.add(this.timeForDisplayClock);
 		return listObjects;
     }
 	
 	public ArrayList<Object> getListShapeObjects(){
-		ArrayList<Object> listObjects = new ArrayList<>();
+		ArrayList<Object> listObjects = new ArrayList<Object>();
 		listObjects.add(this.getGameFlag());
 		listObjects.add(this.getBall());
 		listObjects.add(this.getBricks());
