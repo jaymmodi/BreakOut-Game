@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -32,7 +33,7 @@ public class DisplayClock implements Observer {
 	@Override
 	public void update(Observable o, Object objList) {
 		for (Object obj : (ArrayList<Object>) objList) {
-			if (obj instanceof Number && (int) obj == 2)
+			if (obj instanceof Number && ((Integer)obj).intValue() == 2)
 				time.setText("00:00");
 			else if (obj instanceof String) {
 				time.setText(obj.toString());
