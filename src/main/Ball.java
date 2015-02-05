@@ -1,4 +1,4 @@
-package gameInit;
+package main;
 
 import javax.swing.ImageIcon;
 
