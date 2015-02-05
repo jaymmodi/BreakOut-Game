@@ -1,4 +1,4 @@
-package gameInit;
+package main;
 
 /**
  * 
@@ -6,11 +6,11 @@ package gameInit;
  *
  */
 
-public class ReplayCommand implements Command{
+public class UndoCommand implements Command{
 
-	private Object currReceiver;
+private Object currReceiver;
 	
-	public ReplayCommand(Object currReceiver) 
+	public UndoCommand(Object currReceiver) 
 	{
 		// TODO Auto-generated constructor stub
 		if(currReceiver instanceof TimerObservable)
@@ -28,7 +28,8 @@ public class ReplayCommand implements Command{
 	@Override
 	public void execute() {
 		// TODO Auto-generated method stub
-		((TimerObservable) currReceiver).setGameFlag(false);
-		((TimerObservable) currReceiver).computeAndNotify();
+		((TimerObservable) currReceiver).undoTesting();
 	}
+	
+
 }

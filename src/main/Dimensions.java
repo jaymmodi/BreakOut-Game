@@ -1,4 +1,4 @@
-package gameInit;
+package main;
 
 import java.awt.Image;
 import java.awt.Rectangle;
