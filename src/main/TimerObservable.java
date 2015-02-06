@@ -178,4 +178,8 @@ public class TimerObservable extends Observable {
 		
 
 	}
+	public void changeLayout() {
+		// TODO Auto-generated method stub
+		System.out.println("Layout changed");
+	}
 }
