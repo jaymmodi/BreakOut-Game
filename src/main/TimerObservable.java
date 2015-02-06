@@ -149,4 +149,9 @@ public class TimerObservable extends Observable {
 		this.getTimer().setDelay(5);
 		this.getTimer().restart();
 	}
+
+	public void changeLayout() {
+		// TODO Auto-generated method stub
+		System.out.println("Layout changed");
+	}
 }
