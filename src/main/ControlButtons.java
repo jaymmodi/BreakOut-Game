@@ -163,7 +163,7 @@ public class ControlButtons extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				st_but.setEnabled(true);
-				//st_save.setEnabled(true);
+				// st_save.setEnabled(true);
 				// st_load.setEnabled(false);
 				if (timerObs.getComputeCoordinatesObj().getGameFlag() == 2) {
 					st_but.setEnabled(true);
@@ -233,13 +233,55 @@ public class ControlButtons extends JPanel {
 			}
 		});
 		st_save.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				st_but.setEnabled(false);
+				st_pse.setText("Resume");
+				st_pse.setEnabled(true);
+				st_undo.setEnabled(false);
+				st_replay.setEnabled(true);
+				st_save.setEnabled(false);
 				// TODO Auto-generated method stub
+				// pause
+				PauseCommand pauseCmd;
+				pauseCmd = new PauseCommand(timerObs);
+				timerObs.deleteObserver((Observer) gameDriver.getGameBoard());
+				timerObs.deleteObserver((Observer) gameDriver.getDisplayClock());
+				gameDriver.getControlButtons().setTheCommand(pauseCmd);
+				gameDriver.getControlButtons().press();
+
+				// save logic.
+				SaveCommand saveCommand;
+				saveCommand = new SaveCommand(timerObs);
+				gameDriver.getControlButtons().setTheCommand(saveCommand);
+				gameDriver.getControlButtons().press();
+
+			}
+		});
+		st_load.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				st_but.setEnabled(true);
+				st_pse.setText("Resume");
+				st_pse.setEnabled(true);
+				st_undo.setEnabled(false);
+				st_replay.setEnabled(true);
+				st_save.setEnabled(false);
+				st_load.setEnabled(true);
+				// TODO Auto-generated method stub
+				// load
+				LoadCommand loadCommand;
+				loadCommand = new LoadCommand(timerObs);
+				timerObs.addObserver((Observer) gameDriver.getGameBoard());
+				timerObs.addObserver((Observer) gameDriver
+						.getDisplayClock());
+				gameDriver.getControlButtons().setTheCommand(loadCommand);
+				gameDriver.getControlButtons().press();
+				game.setLoadGameFlag(3);
 				
-			
-			
+				
 			}
 		});
 		setBackground(Color.black);
