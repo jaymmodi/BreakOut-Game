@@ -99,6 +99,7 @@ public class ControlButtons extends JPanel {
 	JButton st_replay = new JButton("Replay");
 	JButton st_save = new JButton("Save");
 	JButton st_load = new JButton("Load");
+	JButton st_change_layout = new JButton("Change Layout");
 
 	public ControlButtons(final GameBoard game) {
 		setStart(false);
@@ -110,14 +111,15 @@ public class ControlButtons extends JPanel {
 		layout.setHorizontalGroup(layout.createSequentialGroup()
 				.addComponent(st_but).addComponent(st_pse)
 				.addComponent(st_undo).addComponent(st_replay)
-				.addComponent(st_save).addComponent(st_load));
+				.addComponent(st_save).addComponent(st_load)
+				.addComponent(st_change_layout));
 
 		layout.setVerticalGroup(layout
 				.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addComponent(st_but))
 				.addComponent(st_pse).addComponent(st_undo)
 				.addComponent(st_replay).addComponent(st_save)
-				.addComponent(st_load));
+				.addComponent(st_load).addComponent(st_change_layout));
 
 		st_pse.setEnabled(false);
 		st_undo.setEnabled(false);
@@ -242,6 +244,18 @@ public class ControlButtons extends JPanel {
 			
 			}
 		});
+		
+		st_change_layout.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			
+			
+			}
+		});
+		
 		setBackground(Color.black);
 	}
 }
