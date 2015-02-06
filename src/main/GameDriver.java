@@ -2,7 +2,9 @@ package main;
 
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+
 import javax.swing.JFrame;
 
 /**
@@ -27,6 +29,7 @@ public class GameDriver extends JFrame implements Constants{
 	        clock = new DisplayClock();
 	        menu = new MenuBoard(game, controlButtons, clock);
 	        initUI(game, menu);
+	        setMinimumSize(this.getSize());
 	    }
 
 	    public TimerObservable getTimerObs() {

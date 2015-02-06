@@ -33,7 +33,7 @@ public class TimerObservable extends Observable {
 	private int replayFrameCounter;
 	int count = 0;
 
-	LayoutManagerType currentLayout;
+
 	
 
 	private SaveLogic saveLogic;
