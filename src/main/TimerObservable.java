@@ -23,6 +23,7 @@ public class TimerObservable extends Observable {
 	boolean gameFlag = true;
 	private int replayFrameCounter;
 	int count = 0;
+	LayoutManagerType currentLayout;
 	
 	public boolean isGameFlag() {
 		return gameFlag;
@@ -152,6 +153,6 @@ public class TimerObservable extends Observable {
 
 	public void changeLayout() {
 		// TODO Auto-generated method stub
-		System.out.println("Layout changed");
+	//	currentLayout = new FlowLayoutManager();
 	}
 }
