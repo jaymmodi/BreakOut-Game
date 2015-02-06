@@ -58,7 +58,7 @@ public class GameData {
 		return brickY;
 	}
 	public void setBrickY(ArrayList<Integer> brickY) {
-		this.brickY = brickY;
+		this.brickY = brickY; 
 	}
 	public int getGameFlag() {
 		return gameFlag;

@@ -20,11 +20,25 @@ public class TimerObservable extends Observable {
 	private Timer timer;
 	private LinkedList<Object> CommandHistoryList = new LinkedList<Object>();
 	private LinkedList<Object> ReplayList = new LinkedList<Object>();
+
+	public LinkedList<Object> getReplayList() {
+		return ReplayList;
+	}
+
+	public void setReplayList(LinkedList<Object> replayList) {
+		ReplayList = replayList;
+	}
+
 	boolean gameFlag = true;
 	private int replayFrameCounter;
 	int count = 0;
+
 	LayoutManagerType currentLayout;
 	
+
+	private SaveLogic saveLogic;
+	private LoadFromFile loadFromFile;
+
 	public boolean isGameFlag() {
 		return gameFlag;
 	}
@@ -66,91 +80,108 @@ public class TimerObservable extends Observable {
 
 	public TimerObservable() {
 		this.computeCoordinatesObj = new ComputeCoordinates();
-		this.timer = new Timer(5,null);
-		this.replayFrameCounter=0;
-		
-		
+		this.timer = new Timer(5, null);
+		this.replayFrameCounter = 0;
+
 	}
-	
-	
-	
+
 	ArrayList<Object> test = new ArrayList<Object>();
+
 	public void computeAndNotify() {
 		timer.addActionListener(new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			
-			if (getComputeCoordinatesObj().getGameFlag()==2){				
-				deleteObservers();
-				getTimer().stop();
-			}	
-			if (gameFlag)
-			{
-				if(count % 10==0)
-				{
-					CommandHistoryList.add(getComputeCoordinatesObj().gameData());
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				if (getComputeCoordinatesObj().getGameFlag() == 2) {
+					deleteObservers();
+					getTimer().stop();
 				}
-//				CommandHistoryList.add(getComputeCoordinatesObj().gameData());
-
-				ReplayList.add(getComputeCoordinatesObj().gameData());
-				getComputeCoordinatesObj().performGameMovement();
-				getComputeCoordinatesObj().updateDisplayClock();		
-				
-				shapeObjects = getComputeCoordinatesObj().getListShapeObjects();
-				setChanged();
-				notifyObservers(shapeObjects);			
-				count++;
-			}
-			else
-			{
-
-				StoreDimensions storeDimensions; 
-				if (replayFrameCounter < ReplayList.size()){			
-					storeDimensions = (StoreDimensions) ReplayList.get(replayFrameCounter); 
-					getComputeCoordinatesObj().saveDimensions(storeDimensions);
-					setChanged();
-					shapeObjects = getComputeCoordinatesObj().getListShapeObjects();
-					setChanged();
-					notifyObservers(shapeObjects);	
-					replayFrameCounter++;			
+				if (gameFlag) {
+					if (count % 10 == 0) {
+						CommandHistoryList.add(getComputeCoordinatesObj()
+								.gameData());
 					}
-				else {
-					replayFrameCounter = 0;
-					setGameFlag(true);
-					timer.stop();
+					// CommandHistoryList.add(getComputeCoordinatesObj().gameData());
+
+					ReplayList.add(getComputeCoordinatesObj().gameData());
+					getComputeCoordinatesObj().performGameMovement();
+					getComputeCoordinatesObj().updateDisplayClock();
+
+					shapeObjects = getComputeCoordinatesObj()
+							.getListShapeObjects();
+					setChanged();
+					notifyObservers(shapeObjects);
+					count++;
+				} else {
+
+					StoreDimensions storeDimensions;
+					if (replayFrameCounter < ReplayList.size()) {
+						storeDimensions = (StoreDimensions) ReplayList
+								.get(replayFrameCounter);
+						getComputeCoordinatesObj().saveDimensions(
+								storeDimensions);
+						setChanged();
+						shapeObjects = getComputeCoordinatesObj()
+								.getListShapeObjects();
+						setChanged();
+						notifyObservers(shapeObjects);
+						replayFrameCounter++;
+					} else {
+						replayFrameCounter = 0;
+						setGameFlag(true);
+						timer.stop();
 					}
 				}
 			}
 		});
-	timer.setDelay(5);
-	timer.restart();
-	
+		timer.setDelay(5);
+		timer.restart();
+		setReplayList(ReplayList);
+
 	}
-	
 
 	public void undoTesting() {
 		this.timer.stop();
-		if(CommandHistoryList.size() != 0){
-		StoreDimensions storeDimensions = (StoreDimensions) this.CommandHistoryList.removeLast();
-	
-		getComputeCoordinatesObj().saveDimensions(storeDimensions);
-		//ReplayList.add(getComputeCoordinatesObj().gameData());
-		ReplayList.add(storeDimensions);
-		shapeObjects = getComputeCoordinatesObj().getUndoObjects();
-		setChanged();
-		notifyObservers(shapeObjects);
+		if (CommandHistoryList.size() != 0) {
+			StoreDimensions storeDimensions = (StoreDimensions) this.CommandHistoryList
+					.removeLast();
+
+			getComputeCoordinatesObj().saveDimensions(storeDimensions);
+			// ReplayList.add(getComputeCoordinatesObj().gameData());
+			ReplayList.add(storeDimensions);
+			shapeObjects = getComputeCoordinatesObj().getUndoObjects();
+			setChanged();
+			notifyObservers(shapeObjects);
 		}
 	}
 
 	public void pauseGame() {
 		this.getTimer().stop();
 	}
-	
+
 	public void resumeGame() {
 		this.getTimer().setDelay(5);
 		this.getTimer().restart();
 	}
 
+	public void saveGame() {
+		// TODO Auto-generated method stub
+		saveLogic = new SaveLogic(ReplayList);
+		saveLogic.save();
+
+	}
+
+	public void loadGame() {
+		// TODO Auto-generated method stub
+		loadFromFile = new LoadFromFile();
+		LinkedList<Object> list = loadFromFile.load();
+		
+		
+		setChanged();
+		notifyObservers(list);
+		
+
+	}
 	public void changeLayout() {
 		// TODO Auto-generated method stub
 	//	currentLayout = new FlowLayoutManager();

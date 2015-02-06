@@ -1,5 +1,6 @@
 package main;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -8,9 +9,13 @@ import java.util.ArrayList;
  *
  */
 
-public class StoreDimensions {
+public class StoreDimensions implements Serializable {
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	int ballX;
 	int ballY;
 	int paddleX;
