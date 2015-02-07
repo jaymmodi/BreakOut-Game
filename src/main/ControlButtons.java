@@ -234,8 +234,6 @@ public class ControlButtons extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				st_but.setEnabled(true);
-				// st_save.setEnabled(true);
-				// st_load.setEnabled(false);
 				if (timerObs.getComputeCoordinatesObj().getGameFlag() == 2) {
 					st_but.setEnabled(true);
 					st_pse.setEnabled(false);
@@ -310,14 +308,13 @@ public class ControlButtons extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				st_but.setEnabled(false);
+				st_but.setEnabled(true);
 				st_pse.setText("Resume");
 				st_pse.setEnabled(true);
 				st_undo.setEnabled(false);
 				st_replay.setEnabled(true);
 				st_save.setEnabled(false);
-				// TODO Auto-generated method stub
-				// pause
+				
 				PauseCommand pauseCmd;
 				pauseCmd = new PauseCommand(timerObs);
 				timerObs.deleteObserver((Observer) gameDriver.getGameBoard());
