@@ -35,7 +35,7 @@ public class ControlButtons extends JPanel {
 	private boolean isPaused;
 	private boolean isStart;
 	private LayoutManager layoutType;
-	int random;
+	int layoutState;
 
 	public boolean isPaused() {
 		return isPaused;
@@ -119,19 +119,10 @@ public class ControlButtons extends JPanel {
 		invalidate();
 		removeAll();
 
-		switch (random) {
-		case 0:			
-			setLayout(new GridLayout(2,0));
-			add(st_but);
-			add(st_pse);
-			add(st_save);
-			add(st_load);  
-			add(st_undo);
-			add(st_replay);
-			add(changeLayout);   
-			break;
-		case 1:
-			setLayout(new FlowLayout());
+		switch (layoutState) {
+		case 0:
+			layoutType = new FlowLayout();
+			setLayout(layoutType);
 			add(st_but);
 			add(st_pse);
 			add(st_save);
@@ -140,9 +131,22 @@ public class ControlButtons extends JPanel {
 			add(st_replay);
 			add(changeLayout);
 			break;
-
+			
+		case 1:	
+			layoutType = new GridLayout(2,0);
+			setLayout(layoutType);
+			add(st_but);
+			add(st_pse);
+			add(st_save);
+			add(st_load);  
+			add(st_undo);
+			add(st_replay);
+			add(changeLayout);   
+			break;
+		
 		case 2:
-			setLayout(new BorderLayout());
+			layoutType = new BorderLayout();
+			setLayout(layoutType);
 			add(st_but,BorderLayout.WEST);
 			add(st_save,BorderLayout.EAST);
 
@@ -171,6 +175,8 @@ public class ControlButtons extends JPanel {
 	JButton changeLayout = new JButton("Layout");
 
 	public ControlButtons(final GameBoard game) {
+		
+		layoutState = 0;
 		setStart(false);
 		setPaused(false);
 		FlowLayout layout = new FlowLayout();
@@ -354,14 +360,16 @@ public class ControlButtons extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				random = (int) (Math.random()*100);
-				random = random % 3;
+				layoutState ++;
+				
+				if(layoutState >=3)
+					layoutState = 0;
 
 				ChangeLayoutCommand changeLayoutCommand = new ChangeLayoutCommand(gameDriver.getControlButtons());
 				setTheCommand(changeLayoutCommand);
 				press();
 
-				System.out.println(random);
+				System.out.println(layoutState);
 			}
 		});
 
