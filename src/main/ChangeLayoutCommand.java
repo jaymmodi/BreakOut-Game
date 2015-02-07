@@ -7,7 +7,7 @@ public class ChangeLayoutCommand implements Command
 	public ChangeLayoutCommand(Object currReceiver) 
 	{
 		// TODO Auto-generated constructor stub
-		if(currReceiver instanceof TimerObservable)
+		if(currReceiver instanceof ControlButtons)
 			this.currReceiver = currReceiver;
 	}
 
@@ -22,6 +22,6 @@ public class ChangeLayoutCommand implements Command
 	@Override
 	public void execute() {
 		// TODO Auto-generated method stub
-		((TimerObservable) currReceiver).changeLayout();
+		((ControlButtons) currReceiver).changeLayout();
 	}
 }

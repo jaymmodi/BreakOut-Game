@@ -6,6 +6,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Observer;
@@ -33,6 +34,8 @@ public class ControlButtons extends JPanel {
 	private TimerObservable timerObs;
 	private boolean isPaused;
 	private boolean isStart;
+	private LayoutManager layoutType;
+	int random;
 
 	public boolean isPaused() {
 		return isPaused;
@@ -70,6 +73,14 @@ public class ControlButtons extends JPanel {
 		return clock;
 	}
 
+	public LayoutManager getLayoutType() {
+		return layoutType;
+	}
+
+	public void setLayoutType(LayoutManager layoutType) {
+		this.layoutType = layoutType;
+	}
+
 	public void setClock(DisplayClock clock) {
 		this.clock = clock;
 	}
@@ -102,6 +113,54 @@ public class ControlButtons extends JPanel {
 		this.theCommand = theCommand;
 	}
 
+	public void changeLayout()
+	{
+
+		invalidate();
+		removeAll();
+
+		switch (random) {
+		case 0:			
+			setLayout(new GridLayout(2,0));
+			add(st_but);
+			add(st_pse);
+			add(st_save);
+			add(st_load);  
+			add(st_undo);
+			add(st_replay);
+			add(changeLayout);   
+			break;
+		case 1:
+			setLayout(new FlowLayout());
+			add(st_but);
+			add(st_pse);
+			add(st_save);
+			add(st_load);
+			add(st_undo);
+			add(st_replay);
+			add(changeLayout);
+			break;
+
+		case 2:
+			setLayout(new BorderLayout());
+			add(st_but,BorderLayout.WEST);
+			add(st_save,BorderLayout.EAST);
+
+			JPanel cPanel = new JPanel();
+			cPanel.setLayout(new BorderLayout());
+			cPanel.add(st_pse,BorderLayout.NORTH); 
+			cPanel.add(st_load,BorderLayout.WEST);
+			cPanel.add(st_undo,BorderLayout.EAST); 
+			cPanel.add(st_replay,BorderLayout.SOUTH);
+			cPanel.add(changeLayout,BorderLayout.CENTER);
+			add(cPanel,BorderLayout.CENTER);
+			break;
+		}
+		validate();
+		gameDriver.pack();
+
+	}
+
 	JButton st_but = new JButton("Start");
 	JButton st_pse = new JButton("Pause ");
 	JButton st_undo = new JButton("Undo");
@@ -123,22 +182,6 @@ public class ControlButtons extends JPanel {
 		add(st_undo);
 		add(st_replay);
 		add(changeLayout);
-		/*layout.setAutoCreateGaps(true);
-		layout.setAutoCreateContainerGaps(true);
-		layout.setHorizontalGroup(layout.createSequentialGroup()
-				.addComponent(st_but).addComponent(st_pse)
-				//.addComponent(st_undo).addComponent(st_replay)
-				.addComponent(st_save)
-				.addComponent(st_load)
-				.addComponent(changeLayout));
-
-		layout.setVerticalGroup(layout
-				.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addComponent(st_but))
-				.addComponent(st_pse)
-				//.addComponent(st_undo).addComponent(st_replay).
-				.addComponent(st_save)
-				.addComponent(st_load).addComponent(changeLayout)); */
 
 		st_pse.setEnabled(false);
 		st_undo.setEnabled(false);
@@ -302,8 +345,8 @@ public class ControlButtons extends JPanel {
 				gameDriver.getControlButtons().setTheCommand(loadCommand);
 				gameDriver.getControlButtons().press();
 				game.setLoadGameFlag(3);
-				
-				
+
+
 			}
 		});
 		changeLayout.addActionListener(new ActionListener() {
@@ -311,77 +354,14 @@ public class ControlButtons extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				int random = (int) (Math.random()*100);
+				random = (int) (Math.random()*100);
 				random = random % 3;
-				ChangeLayoutCommand changeLayoutCommand = new ChangeLayoutCommand(timerObs);
+
+				ChangeLayoutCommand changeLayoutCommand = new ChangeLayoutCommand(gameDriver.getControlButtons());
 				setTheCommand(changeLayoutCommand);
 				press();
+
 				System.out.println(random);
-				invalidate();
-				removeAll();
-				switch (random) {
-				case 0:
-					
-					setLayout(new GridLayout(2,0));
-					add(st_but);
-					add(st_pse);
-					add(st_save);
-					add(st_load);  
-					add(st_undo);
-					add(st_replay);
-					add(changeLayout);   
-					break;
-				case 1:
-					setLayout(new FlowLayout());
-					add(st_but);
-					add(st_pse);
-					add(st_save);
-					add(st_load);
-					add(st_undo);
-					add(st_replay);
-					add(changeLayout);
-					break;
-				case 21:
-					JPanel centerPanel = new JPanel();
-					centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-					setLayout(new BorderLayout());
-					add(st_but,BorderLayout.WEST);
-					centerPanel.add(st_pse); 
-					centerPanel.add(st_load);
-					add(st_save,BorderLayout.EAST);
-					centerPanel.add(changeLayout);
-					add(centerPanel,BorderLayout.CENTER);
-					break;
-				case 2:
-					setLayout(new BorderLayout());
-					add(st_but,BorderLayout.WEST);
-					add(st_save,BorderLayout.EAST);
-
-					JPanel cPanel = new JPanel();
-					cPanel.setLayout(new BorderLayout());
-					cPanel.add(st_pse,BorderLayout.NORTH); 
-					cPanel.add(st_load,BorderLayout.WEST);
-					cPanel.add(st_undo,BorderLayout.EAST); 
-					cPanel.add(st_replay,BorderLayout.SOUTH);
-					cPanel.add(changeLayout,BorderLayout.CENTER);
-					add(cPanel,BorderLayout.CENTER);
-
-
-					
-					break;
-				}
-				validate();
-				//setLayout(new BorderLayout());
-				gameDriver.pack();
-				//add(st_pse,BorderLayout.NORTH); 
-				//add(st_load,BorderLayout.LINE_END);
-
-
-
-
-
-
-
 			}
 		});
 
