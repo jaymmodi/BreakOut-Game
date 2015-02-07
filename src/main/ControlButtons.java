@@ -133,7 +133,7 @@ public class ControlButtons extends JPanel {
 			break;
 			
 		case 1:	
-			layoutType = new GridLayout(2,0);
+			layoutType = new GridLayout(2,1);
 			setLayout(layoutType);
 			add(st_but);
 			add(st_pse);

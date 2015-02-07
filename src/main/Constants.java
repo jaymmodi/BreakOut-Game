@@ -7,7 +7,7 @@ package main;
 
 
 public interface Constants {
-    int WIN_WIDTH = 600;
+    int WIN_WIDTH = 650;
     int WIN_HEIGHT = 650;
     int BRICK_ROWS = 5;
     int BRICK_COLUMNS = 5;
