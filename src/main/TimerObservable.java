@@ -19,6 +19,14 @@ public class TimerObservable extends Observable {
 	private ComputeCoordinates computeCoordinatesObj;
 	private Timer timer;
 	private LinkedList<Object> CommandHistoryList = new LinkedList<Object>();
+	public LinkedList<Object> getCommandHistoryList() {
+		return CommandHistoryList;
+	}
+
+	public void setCommandHistoryList(LinkedList<Object> commandHistoryList) {
+		CommandHistoryList = commandHistoryList;
+	}
+
 	private LinkedList<Object> ReplayList = new LinkedList<Object>();
 
 	public LinkedList<Object> getReplayList() {
@@ -169,12 +177,24 @@ public class TimerObservable extends Observable {
 
 	public void loadGame() {
 		// TODO Auto-generated method stub
+		StoreDimensions storeDimensions;
 		loadFromFile = new LoadFromFile();
+		
 		LinkedList<Object> list = loadFromFile.load();
-		
-		
+		setReplayList(list); // setting replay list for replay after load.
+		setCommandHistoryList(list); //setting command list for undo after load.
+		storeDimensions = (StoreDimensions) list
+				.get(list.size()-1);
+		getComputeCoordinatesObj().saveDimensions(
+				storeDimensions);
 		setChanged();
-		notifyObservers(list);
+		shapeObjects = getComputeCoordinatesObj()
+				.getListShapeObjects();
+		setChanged();
+		notifyObservers(shapeObjects);
+		
+		
+		
 		
 
 	}

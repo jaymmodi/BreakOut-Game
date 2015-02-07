@@ -113,10 +113,19 @@ public class GameBoard extends JPanel implements Constants, Observer {
 	public void paint(Graphics g) {
 		super.paint(g);
 		if (this.getLoadGameFlag() == 3) {
-			ball = new Ball();
-			g.drawImage(ball.getImage(), 50, 100, 50, 50, this);
-		}
-		else if (this.getGameFlag() == 1) {
+			g.drawImage(ball.getImage(), ball.getX(), ball.getY(),
+					ball.getWidth(), ball.getHeight(), this);
+			g.drawImage(paddle.getImage(), paddle.getX(), paddle.getY(),
+					paddle.getWidth(), paddle.getHeight(), this);
+
+			for (int i = 0; i < this.bricks.length; i++) {
+				if (!bricks[i].isDestroyed()) {
+					g.drawImage(bricks[i].getImage(), bricks[i].getX(),
+							bricks[i].getY(), bricks[i].getWidth(),
+							bricks[i].getHeight(), this);
+				}
+			}
+		} else if (this.getGameFlag() == 1) {
 			g.drawImage(ball.getImage(), ball.getX(), ball.getY(),
 					ball.getWidth(), ball.getHeight(), this);
 			g.drawImage(paddle.getImage(), paddle.getX(), paddle.getY(),
@@ -171,12 +180,9 @@ public class GameBoard extends JPanel implements Constants, Observer {
 
 	@Override
 	public void update(Observable o, Object objList) {
-		if (objList instanceof LinkedList<?>) {
-			listFromFile = (LinkedList<Object>) objList;
-			repaint();
-		} else {
-			unPackShapeList((ArrayList<Object>) objList);
-			repaint();
-		}
+
+		unPackShapeList((ArrayList<Object>) objList);
+		repaint();
+
 	}
 }
