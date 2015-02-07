@@ -3,6 +3,7 @@ package main;
 
 
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
 import javax.swing.JPanel;
@@ -15,7 +16,7 @@ import javax.swing.JPanel;
 public class MenuBoard extends JPanel implements Constants {
 
     public MenuBoard(GameBoard game,ControlButtons controlButtons, DisplayClock clock) {
-        GridLayout layout = new GridLayout(0, 1);
+        FlowLayout layout = new FlowLayout();
         this.setLayout(layout);
         this.add(controlButtons);
         this.add(clock.jp);
