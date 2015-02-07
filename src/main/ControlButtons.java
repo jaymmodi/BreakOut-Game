@@ -166,7 +166,7 @@ public class ControlButtons extends JPanel {
 	}
 
 	JButton st_but = new JButton("Start");
-	JButton st_pse = new JButton("Pause ");
+	JButton st_pse = new JButton("Pause");
 	JButton st_undo = new JButton("Undo");
 	JButton st_replay = new JButton("Replay");
 	JButton st_save = new JButton("Save");
@@ -234,14 +234,15 @@ public class ControlButtons extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				st_but.setEnabled(true);
-				if (timerObs.getComputeCoordinatesObj().getGameFlag() == 2) {
+				game.requestFocusInWindow();
+				/*if (timerObs.getComputeCoordinatesObj().getGameFlag() == 2) {
 					st_but.setEnabled(true);
 					st_pse.setEnabled(false);
 					st_undo.setEnabled(false);
 					st_replay.setEnabled(false);
 					timerObs.getTimer().stop();
 					timerObs.deleteObservers();
-				}
+				}*/
 
 				if (st_pse.getText().equals("Pause")) {
 					PauseCommand pauseCmd;
