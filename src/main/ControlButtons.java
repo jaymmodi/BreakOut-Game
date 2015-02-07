@@ -296,6 +296,9 @@ public class ControlButtons extends JPanel {
 				isStart = false;
 				ReplayCommand replyCmd;
 				replyCmd = new ReplayCommand(timerObs);
+				timerObs.addObserver((Observer) gameDriver.getGameBoard());
+				timerObs.addObserver((Observer) gameDriver
+						.getDisplayClock());
 				gameDriver.getControlButtons().setTheCommand(replyCmd);
 				gameDriver.getControlButtons().press();
 				st_undo.setEnabled(true);

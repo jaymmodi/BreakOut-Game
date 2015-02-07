@@ -72,7 +72,7 @@ public class GameDriver extends JFrame implements Constants{
 	        pack();
 	        setTitle("Breakout");
 	        setSize(WIN_WIDTH, WIN_HEIGHT);
-	        setResizable(false);
+	        setResizable(true);
 	        setDefaultCloseOperation(EXIT_ON_CLOSE);
 	    }
 
