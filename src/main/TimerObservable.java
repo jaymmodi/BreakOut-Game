@@ -3,7 +3,9 @@ package main;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Observable;
+
 import javax.swing.Timer;
 
 import java.util.LinkedList;

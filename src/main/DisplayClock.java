@@ -33,7 +33,7 @@ public class DisplayClock implements Observer {
 	@Override
 	public void update(Observable o, Object objList) {
 		if (objList instanceof LinkedList<?>) {
-			System.out.println("aa gaya");
+			System.out.println("testing");
 		} else {
 			for (Object obj : (ArrayList<?>) objList) {
 				if (obj instanceof Number && ((Integer) obj).intValue() == 2)
@@ -45,3 +45,4 @@ public class DisplayClock implements Observer {
 		}
 	}
 }
+
