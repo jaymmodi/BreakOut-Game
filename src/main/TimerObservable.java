@@ -21,6 +21,16 @@ public class TimerObservable extends Observable {
 	private ComputeCoordinates computeCoordinatesObj;
 	private Timer timer;
 	private LinkedList<Object> CommandHistoryList = new LinkedList<Object>();
+	private boolean loadGame; // need this to resume game after load.
+
+	public boolean isLoadGame() {
+		return loadGame;
+	}
+
+	public void setLoadGame(boolean loadGame) {
+		this.loadGame = loadGame;
+	}
+
 	public LinkedList<Object> getCommandHistoryList() {
 		return CommandHistoryList;
 	}
@@ -42,9 +52,6 @@ public class TimerObservable extends Observable {
 	boolean gameFlag = true;
 	private int replayFrameCounter;
 	int count = 0;
-
-
-	
 
 	private SaveLogic saveLogic;
 	private LoadFromFile loadFromFile;
@@ -170,6 +177,9 @@ public class TimerObservable extends Observable {
 	}
 
 	public void resumeGame() {
+		if (isLoadGame()) {
+			computeAndNotify();
+		}
 		this.getTimer().setDelay(5);
 		this.getTimer().restart();
 	}
@@ -183,29 +193,25 @@ public class TimerObservable extends Observable {
 
 	public void loadGame() {
 		// TODO Auto-generated method stub
+		setLoadGame(true);
 		StoreDimensions storeDimensions;
 		loadFromFile = new LoadFromFile();
-		
+
 		LinkedList<Object> list = loadFromFile.load();
 		setReplayList(list); // setting replay list for replay after load.
-		setCommandHistoryList(list); //setting command list for undo after load.
-		storeDimensions = (StoreDimensions) list
-				.get(list.size()-1);
-		getComputeCoordinatesObj().saveDimensions(
-				storeDimensions);
+		setCommandHistoryList(list); // setting command list for undo after
+										// load.
+		storeDimensions = (StoreDimensions) list.get(list.size() - 1);
+		getComputeCoordinatesObj().saveDimensions(storeDimensions);
 		setChanged();
-		shapeObjects = getComputeCoordinatesObj()
-				.getListShapeObjects();
+		shapeObjects = getComputeCoordinatesObj().getListShapeObjects();
 		setChanged();
 		notifyObservers(shapeObjects);
-		
-		
-		
-		
 
 	}
+
 	public void changeLayout() {
 		// TODO Auto-generated method stub
-	//	currentLayout = new FlowLayoutManager();
+		// currentLayout = new FlowLayoutManager();
 	}
 }
