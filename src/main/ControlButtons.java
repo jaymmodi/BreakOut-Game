@@ -240,9 +240,11 @@ public class ControlButtons extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				st_but.setEnabled(true);
+				
 				game.requestFocusInWindow();
 
 				if (st_pse.getText().equals("Pause")) {
+					st_undo.setEnabled(false);
 					PauseCommand pauseCmd;
 					pauseCmd = new PauseCommand(timerObs);
 					timerObs.deleteObserver((Observer) gameDriver
@@ -253,6 +255,7 @@ public class ControlButtons extends JPanel {
 					gameDriver.getControlButtons().press();
 					st_pse.setText("Resume");
 				} else {
+					st_undo.setEnabled(true);
 					ResumeCommand resumeCmd;
 					resumeCmd = new ResumeCommand(timerObs);
 					timerObs.addObserver((Observer) gameDriver.getGameBoard());

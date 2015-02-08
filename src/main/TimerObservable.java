@@ -22,9 +22,17 @@ public class TimerObservable extends Observable {
 	private Timer timer;
 	private LinkedList<Object> CommandHistoryList = new LinkedList<Object>();
 	private boolean loadGame; // need this to resume game after load.
-	private LoadFromFile loadFromFile;
+
+	boolean gameFlag = true;
+	private int replayFrameCounter;
+	int count = 0;
+
 	private SaveLogic saveLogic;
-	
+	private LoadFromFile loadFromFile;
+
+	private LinkedList<Object> ReplayList = new LinkedList<Object>();
+	private ArrayList<Object> shapeObjects;
+
 	public boolean isLoadGame() {
 		return loadGame;
 	}
@@ -41,8 +49,6 @@ public class TimerObservable extends Observable {
 		CommandHistoryList = commandHistoryList;
 	}
 
-	private LinkedList<Object> ReplayList = new LinkedList<Object>();
-
 	public LinkedList<Object> getReplayList() {
 		return ReplayList;
 	}
@@ -50,10 +56,6 @@ public class TimerObservable extends Observable {
 	public void setReplayList(LinkedList<Object> replayList) {
 		ReplayList = replayList;
 	}
-
-	boolean gameFlag = true;
-	private int replayFrameCounter;
-	int count = 0;
 
 	public LoadFromFile getLoadFromFile() {
 		return loadFromFile;
@@ -63,13 +65,9 @@ public class TimerObservable extends Observable {
 		this.loadFromFile = loadFromFile;
 	}
 
-	
 	public SaveLogic getSaveLogic() {
 		return saveLogic;
 	}
-
-	
-
 
 	public boolean isGameFlag() {
 		return gameFlag;
@@ -91,8 +89,6 @@ public class TimerObservable extends Observable {
 		this.shapeObjects = shapeObjects;
 	}
 
-	private ArrayList<Object> shapeObjects;
-
 	public ComputeCoordinates getComputeCoordinatesObj() {
 		return computeCoordinatesObj;
 	}
@@ -112,16 +108,14 @@ public class TimerObservable extends Observable {
 
 	public TimerObservable() {
 		this.computeCoordinatesObj = new ComputeCoordinates();
-		this.timer = new Timer(10, null);
+		this.timer = new Timer(5, null);
 		this.replayFrameCounter = 0;
-
 	}
 
 	public void computeAndNotify() {
 		timer.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
 				if (gameFlag) {
 					if (count % 10 == 0) {
 						CommandHistoryList.add(getComputeCoordinatesObj()
@@ -130,14 +124,14 @@ public class TimerObservable extends Observable {
 					ReplayList.add(getComputeCoordinatesObj().gameData());
 					getComputeCoordinatesObj().performGameMovement();
 					getComputeCoordinatesObj().updateDisplayClock();
-
+	
 					shapeObjects = getComputeCoordinatesObj()
 							.getListShapeObjects();
 					setChanged();
 					notifyObservers(shapeObjects);
 					count++;
 				} else {
-
+	
 					StoreDimensions storeDimensions;
 					if (replayFrameCounter < ReplayList.size()) {
 						storeDimensions = (StoreDimensions) ReplayList
@@ -154,11 +148,18 @@ public class TimerObservable extends Observable {
 						replayFrameCounter = 0;
 						setGameFlag(true);
 						timer.stop();
+						getComputeCoordinatesObj().setGameFlag(2);
 					}
+				}
+				
+				if(getComputeCoordinatesObj().getGameFlag() == 2)
+				{
+					deleteObservers();
+					timer.stop();
 				}
 			}
 		});
-		timer.setDelay(10);
+		timer.setDelay(5);
 		timer.restart();
 		setReplayList(ReplayList);
 	}
@@ -189,7 +190,7 @@ public class TimerObservable extends Observable {
 		if (isLoadGame()) {
 			computeAndNotify();
 		}
-		this.getTimer().setDelay(10);
+		this.getTimer().setDelay(5);
 		this.getTimer().restart();
 	}
 
@@ -207,8 +208,7 @@ public class TimerObservable extends Observable {
 
 		LinkedList<Object> list = loadFromFile.load();
 		setReplayList(list); // setting replay list for replay after load.
-		setCommandHistoryList(list); // setting command list for undo after
-										// load.
+		setCommandHistoryList(list); // setting command list for undo after load.
 
 		storeDimensions = (StoreDimensions) list.get(list.size() - 1);
 		getComputeCoordinatesObj().saveDimensions(storeDimensions);
