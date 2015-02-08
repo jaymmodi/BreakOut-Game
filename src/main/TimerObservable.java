@@ -176,6 +176,7 @@ public class TimerObservable extends Observable {
 
 			getComputeCoordinatesObj().saveDimensions(storeDimensions);
 			ReplayList.add(storeDimensions);
+			this.CommandHistoryList.removeLast();
 			shapeObjects = getComputeCoordinatesObj().getListShapeObjects();
 			setChanged();
 			notifyObservers(shapeObjects);
