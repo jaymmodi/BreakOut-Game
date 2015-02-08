@@ -14,6 +14,7 @@ import java.util.Observer;
 import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
@@ -36,7 +37,8 @@ public class ControlButtons extends JPanel {
 	private boolean isStart;
 	private LayoutManager layoutType;
 	int layoutState;
-
+	LoadFromFile loadFromFile;
+	
 	public boolean isPaused() {
 		return isPaused;
 	}
@@ -131,7 +133,7 @@ public class ControlButtons extends JPanel {
 			add(st_replay);
 			add(changeLayout);
 			break;
-			
+
 		case 1:	
 			layoutType = new GridLayout(2,1);
 			setLayout(layoutType);
@@ -143,7 +145,7 @@ public class ControlButtons extends JPanel {
 			add(st_replay);
 			add(changeLayout);   
 			break;
-		
+
 		case 2:
 			layoutType = new BorderLayout();
 			setLayout(layoutType);
@@ -175,7 +177,7 @@ public class ControlButtons extends JPanel {
 	JButton changeLayout = new JButton("Layout");
 
 	public ControlButtons(final GameBoard game) {
-		
+
 		layoutState = 0;
 		setStart(false);
 		setPaused(false);
@@ -194,6 +196,7 @@ public class ControlButtons extends JPanel {
 		st_replay.setEnabled(false);
 		st_save.setEnabled(false);
 
+		loadFromFile = new LoadFromFile();
 		st_load.setSize(new Dimension(changeLayout.getWidth(),changeLayout.getHeight()));
 		st_but.addActionListener(new ActionListener() {
 			@Override
@@ -315,7 +318,7 @@ public class ControlButtons extends JPanel {
 				st_undo.setEnabled(false);
 				st_replay.setEnabled(true);
 				st_save.setEnabled(false);
-				
+
 				PauseCommand pauseCmd;
 				pauseCmd = new PauseCommand(timerObs);
 				timerObs.deleteObserver((Observer) gameDriver.getGameBoard());
@@ -338,12 +341,13 @@ public class ControlButtons extends JPanel {
 				st_but.setEnabled(true);
 				st_pse.setText("Resume");
 				st_pse.setEnabled(true);
-				st_undo.setEnabled(false);
+				st_undo.setEnabled(true);
 				st_replay.setEnabled(true);
 				st_save.setEnabled(false);
 				st_load.setEnabled(true);
 				// TODO Auto-generated method stub
 				// load
+				loadFromExplorer();
 				LoadCommand loadCommand;
 				loadCommand = new LoadCommand(timerObs);
 				timerObs.addObserver((Observer) gameDriver.getGameBoard());
@@ -353,7 +357,29 @@ public class ControlButtons extends JPanel {
 				gameDriver.getControlButtons().press();
 				game.setLoadGameFlag(3);
 
+				
+			}
 
+			private void loadFromExplorer() {
+				// TODO Auto-generated method stub
+				String loadedFileName="";
+				String loadedDirectoryname="";
+				JFileChooser c = new JFileChooser();
+				int rVal = c.showOpenDialog(gameDriver);
+				if (rVal == JFileChooser.APPROVE_OPTION) {
+					loadedFileName= c.getSelectedFile().getName();
+					loadedDirectoryname=c.getCurrentDirectory().toString();
+				}
+				if (rVal == JFileChooser.CANCEL_OPTION) {
+					loadedFileName="You pressed cancel";
+					loadedDirectoryname="";
+				}
+				String modifiedfileName = (loadedDirectoryname+"\\"+loadedFileName).replace("\\", "\\\\");
+				loadFromFile.setFileName(modifiedfileName);
+				timerObs.setLoadFromFile(loadFromFile);
+				System.out.println("file :"+modifiedfileName);
+		
+				
 			}
 		});
 		changeLayout.addActionListener(new ActionListener() {
@@ -362,7 +388,7 @@ public class ControlButtons extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				layoutState ++;
-				
+
 				if(layoutState >=3)
 					layoutState = 0;
 

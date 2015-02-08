@@ -53,6 +53,14 @@ public class TimerObservable extends Observable {
 	private int replayFrameCounter;
 	int count = 0;
 
+	public LoadFromFile getLoadFromFile() {
+		return loadFromFile;
+	}
+
+	public void setLoadFromFile(LoadFromFile loadFromFile) {
+		this.loadFromFile = loadFromFile;
+	}
+
 	private SaveLogic saveLogic;
 	private LoadFromFile loadFromFile;
 
@@ -160,13 +168,12 @@ public class TimerObservable extends Observable {
 	public void undoTesting() {
 		this.timer.stop();
 		if (CommandHistoryList.size() != 0) {
-			StoreDimensions storeDimensions = (StoreDimensions) this.CommandHistoryList
-					.removeLast();
+			StoreDimensions storeDimensions = (StoreDimensions)CommandHistoryList.removeLast();
 
 			getComputeCoordinatesObj().saveDimensions(storeDimensions);
 			// ReplayList.add(getComputeCoordinatesObj().gameData());
 			ReplayList.add(storeDimensions);
-			shapeObjects = getComputeCoordinatesObj().getUndoObjects();
+			shapeObjects = getComputeCoordinatesObj().getListShapeObjects();
 			setChanged();
 			notifyObservers(shapeObjects);
 		}
@@ -195,7 +202,7 @@ public class TimerObservable extends Observable {
 		// TODO Auto-generated method stub
 		setLoadGame(true);
 		StoreDimensions storeDimensions;
-		loadFromFile = new LoadFromFile();
+		
 
 		LinkedList<Object> list = loadFromFile.load();
 		setReplayList(list); // setting replay list for replay after load.
@@ -203,7 +210,6 @@ public class TimerObservable extends Observable {
 										// load.
 		storeDimensions = (StoreDimensions) list.get(list.size() - 1);
 		getComputeCoordinatesObj().saveDimensions(storeDimensions);
-		setChanged();
 		shapeObjects = getComputeCoordinatesObj().getListShapeObjects();
 		setChanged();
 		notifyObservers(shapeObjects);
