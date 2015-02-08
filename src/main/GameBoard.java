@@ -163,7 +163,7 @@ public class GameBoard extends JPanel implements Constants, Observer {
 	public void unPackShapeList(ArrayList<Object> obj) {
 
 			if (obj.get(0) instanceof Number) {
-				int flag = (int) obj.get(0);
+				int flag = (Integer) obj.get(0);
 				setGameFlag(flag);
 			}
 			if (obj.get(1) instanceof Ball) {
