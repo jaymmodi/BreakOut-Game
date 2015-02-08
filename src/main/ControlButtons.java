@@ -38,7 +38,8 @@ public class ControlButtons extends JPanel {
 	private LayoutManager layoutType;
 	int layoutState;
 	LoadFromFile loadFromFile;
-
+	SaveLogic saveLogic;
+	
 	public boolean isPaused() {
 		return isPaused;
 	}
@@ -197,6 +198,8 @@ public class ControlButtons extends JPanel {
 		st_save.setEnabled(false);
 
 		loadFromFile = new LoadFromFile();
+		saveLogic = new SaveLogic();
+		
 		st_load.setSize(new Dimension(changeLayout.getWidth(),changeLayout.getHeight()));
 		st_but.addActionListener(new ActionListener() {
 			@Override
@@ -308,7 +311,7 @@ public class ControlButtons extends JPanel {
 				st_undo.setEnabled(false);
 				st_replay.setEnabled(true);
 				st_save.setEnabled(false);
-
+				
 				PauseCommand pauseCmd;
 				pauseCmd = new PauseCommand(timerObs);
 				timerObs.deleteObserver((Observer) gameDriver.getGameBoard());
@@ -316,6 +319,8 @@ public class ControlButtons extends JPanel {
 				gameDriver.getControlButtons().setTheCommand(pauseCmd);
 				gameDriver.getControlButtons().press();
 
+				saveUsingExplorer();
+				
 				// save logic.
 				SaveCommand saveCommand;
 				saveCommand = new SaveCommand(timerObs);
@@ -323,6 +328,30 @@ public class ControlButtons extends JPanel {
 				press();
 
 			}
+			
+			private void saveUsingExplorer() {
+				// TODO Auto-generated method stub
+				String newFileName="";
+				String newDirectoryname="";
+				JFileChooser c = new JFileChooser();
+                int rVal = c.showSaveDialog(gameDriver);	
+                
+                if (rVal == JFileChooser.APPROVE_OPTION) {
+					newFileName= c.getSelectedFile().getName();
+					newDirectoryname=c.getCurrentDirectory().toString();
+				}
+				if (rVal == JFileChooser.CANCEL_OPTION) {
+					newFileName="You pressed cancel";
+					newDirectoryname="";
+				}
+				String modifiedfileName = (newDirectoryname+"\\"+newFileName).replace("\\", "\\\\");
+				saveLogic.setFileName(modifiedfileName);
+				timerObs.setSaveLogic(saveLogic);
+				System.out.println("file during save :"+modifiedfileName);
+
+
+			}
+
 		});
 		st_load.addActionListener(new ActionListener() {
 
@@ -353,6 +382,7 @@ public class ControlButtons extends JPanel {
 
 				game.requestFocusInWindow();
 			}
+			
 			private void loadFromExplorer() {
 				// TODO Auto-generated method stub
 				String loadedFileName="";

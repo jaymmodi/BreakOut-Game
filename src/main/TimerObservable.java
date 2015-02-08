@@ -22,7 +22,9 @@ public class TimerObservable extends Observable {
 	private Timer timer;
 	private LinkedList<Object> CommandHistoryList = new LinkedList<Object>();
 	private boolean loadGame; // need this to resume game after load.
-
+	private LoadFromFile loadFromFile;
+	private SaveLogic saveLogic;
+	
 	public boolean isLoadGame() {
 		return loadGame;
 	}
@@ -61,8 +63,13 @@ public class TimerObservable extends Observable {
 		this.loadFromFile = loadFromFile;
 	}
 
-	private SaveLogic saveLogic;
-	private LoadFromFile loadFromFile;
+	
+	public SaveLogic getSaveLogic() {
+		return saveLogic;
+	}
+
+	
+
 
 	public boolean isGameFlag() {
 		return gameFlag;
@@ -188,7 +195,7 @@ public class TimerObservable extends Observable {
 
 	public void saveGame() {
 		// TODO Auto-generated method stub
-		saveLogic = new SaveLogic(ReplayList);
+		saveLogic.setListToSave(ReplayList);
 		saveLogic.save();
 	}
 
@@ -208,5 +215,10 @@ public class TimerObservable extends Observable {
 		shapeObjects = getComputeCoordinatesObj().getListShapeObjects();
 		setChanged();
 		notifyObservers(shapeObjects);
+	}
+
+	public void setSaveLogic(SaveLogic saveLogic) {
+		// TODO Auto-generated method stub
+		this.saveLogic = saveLogic;
 	}
 }
