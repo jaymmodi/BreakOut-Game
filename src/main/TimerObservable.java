@@ -3,7 +3,9 @@ package main;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Observable;
+
 import javax.swing.Timer;
 
 import java.util.LinkedList;
@@ -53,6 +55,18 @@ public class TimerObservable extends Observable {
 
 	public void setReplayList(LinkedList<Object> replayList) {
 		ReplayList = replayList;
+	}
+
+	public LoadFromFile getLoadFromFile() {
+		return loadFromFile;
+	}
+
+	public void setLoadFromFile(LoadFromFile loadFromFile) {
+		this.loadFromFile = loadFromFile;
+	}
+
+	public SaveLogic getSaveLogic() {
+		return saveLogic;
 	}
 
 	public boolean isGameFlag() {
@@ -154,6 +168,7 @@ public class TimerObservable extends Observable {
 		this.timer.stop();
 		System.out.println(CommandHistoryList);
 		if (CommandHistoryList.size() != 0) {
+
 			StoreDimensions storeDimensions = (StoreDimensions) this.CommandHistoryList
 					.removeLast();
 			System.out.println(storeDimensions.ballX);
@@ -181,7 +196,7 @@ public class TimerObservable extends Observable {
 
 	public void saveGame() {
 		// TODO Auto-generated method stub
-		saveLogic = new SaveLogic(ReplayList);
+		saveLogic.setListToSave(ReplayList);
 		saveLogic.save();
 	}
 
@@ -189,7 +204,7 @@ public class TimerObservable extends Observable {
 		// TODO Auto-generated method stub
 		setLoadGame(true);
 		StoreDimensions storeDimensions;
-		loadFromFile = new LoadFromFile();
+		
 
 		LinkedList<Object> list = loadFromFile.load();
 		setReplayList(list); // setting replay list for replay after load.
@@ -197,9 +212,13 @@ public class TimerObservable extends Observable {
 
 		storeDimensions = (StoreDimensions) list.get(list.size() - 1);
 		getComputeCoordinatesObj().saveDimensions(storeDimensions);
-		setChanged();
 		shapeObjects = getComputeCoordinatesObj().getListShapeObjects();
 		setChanged();
 		notifyObservers(shapeObjects);
+	}
+
+	public void setSaveLogic(SaveLogic saveLogic) {
+		// TODO Auto-generated method stub
+		this.saveLogic = saveLogic;
 	}
 }

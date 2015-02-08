@@ -14,6 +14,7 @@ import java.util.Observer;
 import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
@@ -36,7 +37,9 @@ public class ControlButtons extends JPanel {
 	private boolean isStart;
 	private LayoutManager layoutType;
 	int layoutState;
-
+	LoadFromFile loadFromFile;
+	SaveLogic saveLogic;
+	
 	public boolean isPaused() {
 		return isPaused;
 	}
@@ -131,7 +134,7 @@ public class ControlButtons extends JPanel {
 			add(st_replay);
 			add(changeLayout);
 			break;
-			
+
 		case 1:	
 			layoutType = new GridLayout(2,1);
 			setLayout(layoutType);
@@ -143,7 +146,7 @@ public class ControlButtons extends JPanel {
 			add(st_replay);
 			add(changeLayout);   
 			break;
-		
+
 		case 2:
 			layoutType = new BorderLayout();
 			setLayout(layoutType);
@@ -175,7 +178,7 @@ public class ControlButtons extends JPanel {
 	JButton changeLayout = new JButton("Layout");
 
 	public ControlButtons(final GameBoard game) {
-		
+
 		layoutState = 0;
 		setStart(false);
 		setPaused(false);
@@ -194,6 +197,9 @@ public class ControlButtons extends JPanel {
 		st_replay.setEnabled(false);
 		st_save.setEnabled(false);
 
+		loadFromFile = new LoadFromFile();
+		saveLogic = new SaveLogic();
+		
 		st_load.setSize(new Dimension(changeLayout.getWidth(),changeLayout.getHeight()));
 		st_but.addActionListener(new ActionListener() {
 			@Override
@@ -316,6 +322,8 @@ public class ControlButtons extends JPanel {
 				gameDriver.getControlButtons().setTheCommand(pauseCmd);
 				gameDriver.getControlButtons().press();
 
+				saveUsingExplorer();
+				
 				// save logic.
 				SaveCommand saveCommand;
 				saveCommand = new SaveCommand(timerObs);
@@ -323,6 +331,30 @@ public class ControlButtons extends JPanel {
 				press();
 
 			}
+			
+			private void saveUsingExplorer() {
+				// TODO Auto-generated method stub
+				String newFileName="";
+				String newDirectoryname="";
+				JFileChooser c = new JFileChooser();
+                int rVal = c.showSaveDialog(gameDriver);	
+                
+                if (rVal == JFileChooser.APPROVE_OPTION) {
+					newFileName= c.getSelectedFile().getName();
+					newDirectoryname=c.getCurrentDirectory().toString();
+				}
+				if (rVal == JFileChooser.CANCEL_OPTION) {
+					newFileName="You pressed cancel";
+					newDirectoryname="";
+				}
+				String modifiedfileName = (newDirectoryname+"\\"+newFileName).replace("\\", "\\\\");
+				saveLogic.setFileName(modifiedfileName);
+				timerObs.setSaveLogic(saveLogic);
+				System.out.println("file during save :"+modifiedfileName);
+
+
+			}
+
 		});
 		st_load.addActionListener(new ActionListener() {
 
@@ -338,6 +370,9 @@ public class ControlButtons extends JPanel {
 				st_load.setEnabled(true);
 				// TODO Auto-generated method stub
 				// load
+
+				loadFromExplorer();
+
 				timerObs.getTimer().stop();
 				LoadCommand loadCommand;
 				loadCommand = new LoadCommand(timerObs);
@@ -347,7 +382,29 @@ public class ControlButtons extends JPanel {
 				setTheCommand(loadCommand);
 				press();
 				game.setLoadGameFlag(3);
+
 				game.requestFocusInWindow();
+			}
+			
+			private void loadFromExplorer() {
+				// TODO Auto-generated method stub
+				String loadedFileName="";
+				String loadedDirectoryname="";
+				JFileChooser c = new JFileChooser();
+				int rVal = c.showOpenDialog(gameDriver);
+				if (rVal == JFileChooser.APPROVE_OPTION) {
+					loadedFileName= c.getSelectedFile().getName();
+					loadedDirectoryname=c.getCurrentDirectory().toString();
+				}
+				if (rVal == JFileChooser.CANCEL_OPTION) {
+					loadedFileName="You pressed cancel";
+					loadedDirectoryname="";
+				}
+				String modifiedfileName = (loadedDirectoryname+"\\"+loadedFileName).replace("\\", "\\\\");
+				loadFromFile.setFileName(modifiedfileName);
+				timerObs.setLoadFromFile(loadFromFile);
+				System.out.println("file :"+modifiedfileName);
+
 
 			}
 		});
@@ -357,7 +414,7 @@ public class ControlButtons extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				layoutState ++;
-				
+
 				if(layoutState >=3)
 					layoutState = 0;
 

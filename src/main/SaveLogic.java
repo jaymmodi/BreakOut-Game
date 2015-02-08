@@ -15,15 +15,24 @@ public class SaveLogic {
 	private FileOutputStream fileOutputStream;
 	private ObjectOutputStream objectOutputStream;
 	private LinkedList<Object> listToSave;
+	private String fileName;
 
-	public SaveLogic(LinkedList<Object> listToSave) {
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public void setListToSave(LinkedList<Object> listToSave) {
 		// TODO Auto-generated constructor stub
 		this.listToSave = listToSave;
 	}
 
 	public void save() {
 		try {
-			fileOutputStream = new FileOutputStream("src\\save\\save.txt");
+			fileOutputStream = new FileOutputStream(getFileName());
 			objectOutputStream = new ObjectOutputStream(fileOutputStream);
 			// listToSave = timerObservable.getReplayList();
 			System.out.println(listToSave.size());
@@ -41,5 +50,4 @@ public class SaveLogic {
 		}
 
 	}
-
 }
