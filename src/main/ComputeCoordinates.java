@@ -96,7 +96,7 @@ public class ComputeCoordinates implements Constants {
 		int k = 0;
 		for (int i = 0; i < Constants.BRICK_ROWS; i++) {
 			for (int j = 0; j < Constants.BRICK_COLUMNS; j++) {
-				bricks[k] = new Brick(j * 40 + 130, i * 10 + 50);
+				bricks[k] = new Brick(j * 40 + 210, i * 10 + 80);
 				k++;
 			}
 		}
