@@ -476,7 +476,7 @@ public class ControlButtons extends JPanel implements Observer {
 		// call changelayout method
 		 if(((ArrayList<?>)objList).get(((ArrayList<?>)objList).size()-1) instanceof Number)
 		 {
-			 setLayoutState((int)((ArrayList<?>)objList).get(((ArrayList<?>)objList).size()-1));
+			 setLayoutState((Integer)((ArrayList<?>)objList).get(((ArrayList<?>)objList).size()-1));
 			 changeLayout();
 		 }
 		
