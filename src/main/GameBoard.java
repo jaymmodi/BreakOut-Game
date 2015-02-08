@@ -160,22 +160,22 @@ public class GameBoard extends JPanel implements Constants, Observer {
 		g.dispose();
 	}
 
-	public void unPackShapeList(ArrayList<Object> objList) {
+	public void unPackShapeList(ArrayList<Object> obj) {
 
-		for (Object obj : objList) {
-			if (obj instanceof Number) {
-				int flag = ((Number) obj).intValue();
+			if (obj.get(0) instanceof Number) {
+				int flag = (int) obj.get(0);
 				setGameFlag(flag);
 			}
-
-			else if (obj instanceof Ball) {
-				setBall((Ball) obj);
-			} else if (obj instanceof Brick[]) {
-				setBricks((Brick[]) obj);
-			} else if (obj instanceof Paddle) {
-				setPaddle((Paddle) obj);
+			if (obj.get(1) instanceof Ball) {
+				setBall((Ball) obj.get(1));
+			} 
+			if (obj.get(2) instanceof Brick[]) {
+				setBricks((Brick[]) obj.get(2));
+			} 
+			if (obj.get(3) instanceof Paddle) {
+				setPaddle((Paddle) obj.get(3));
 			}
-		}
+			
 
 	}
 

@@ -23,6 +23,8 @@ public class TimerObservable extends Observable {
 	private LinkedList<Object> CommandHistoryList = new LinkedList<Object>();
 	private boolean loadGame; // need this to resume game after load.
 
+	
+
 	boolean gameFlag = true;
 	private int replayFrameCounter;
 	int count = 0;
@@ -124,14 +126,14 @@ public class TimerObservable extends Observable {
 					ReplayList.add(getComputeCoordinatesObj().gameData());
 					getComputeCoordinatesObj().performGameMovement();
 					getComputeCoordinatesObj().updateDisplayClock();
-	
+					
 					shapeObjects = getComputeCoordinatesObj()
 							.getListShapeObjects();
 					setChanged();
 					notifyObservers(shapeObjects);
 					count++;
 				} else {
-	
+
 					StoreDimensions storeDimensions;
 					if (replayFrameCounter < ReplayList.size()) {
 						storeDimensions = (StoreDimensions) ReplayList
@@ -151,7 +153,7 @@ public class TimerObservable extends Observable {
 						getComputeCoordinatesObj().setGameFlag(2);
 					}
 				}
-				
+
 				if(getComputeCoordinatesObj().getGameFlag() == 2)
 				{
 					deleteObservers();
@@ -176,6 +178,7 @@ public class TimerObservable extends Observable {
 
 			getComputeCoordinatesObj().saveDimensions(storeDimensions);
 			ReplayList.add(storeDimensions);
+			this.CommandHistoryList.removeLast();
 			shapeObjects = getComputeCoordinatesObj().getListShapeObjects();
 			setChanged();
 			notifyObservers(shapeObjects);
@@ -204,7 +207,7 @@ public class TimerObservable extends Observable {
 		// TODO Auto-generated method stub
 		setLoadGame(true);
 		StoreDimensions storeDimensions;
-		
+
 
 		LinkedList<Object> list = loadFromFile.load();
 		setReplayList(list); // setting replay list for replay after load.

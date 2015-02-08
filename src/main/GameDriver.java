@@ -24,7 +24,7 @@ public class GameDriver extends JFrame implements Constants{
 
 	    public GameDriver() {
 	        game = new GameBoard();
-	        timerObs= new TimerObservable();
+	      //  timerObs= new TimerObservable();
 	        controlButtons = new ControlButtons(game);
 	        clock = new DisplayClock();
 	        menu = new MenuBoard(game, controlButtons, clock);
@@ -85,7 +85,7 @@ public class GameDriver extends JFrame implements Constants{
 	        		gameDriver.getControlButtons().setGameDriver(gameDriver);
 	        		gameDriver.getControlButtons().setClock(gameDriver.getDisplayClock());
 	        		gameDriver.getControlButtons().setGame(gameDriver.getGameBoard());
-	        		gameDriver.getControlButtons().setTimerObs(gameDriver.getTimerObs());
+	        		//gameDriver.getControlButtons().setTimerObs(gameDriver.getTimerObs());
 	            }
 	        });
 	    }
