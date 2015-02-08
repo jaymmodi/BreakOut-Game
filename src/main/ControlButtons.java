@@ -18,7 +18,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-
 /**
  * 
  * @author
@@ -39,7 +38,7 @@ public class ControlButtons extends JPanel {
 	int layoutState;
 	LoadFromFile loadFromFile;
 	SaveLogic saveLogic;
-	
+
 	public boolean isPaused() {
 		return isPaused;
 	}
@@ -116,8 +115,7 @@ public class ControlButtons extends JPanel {
 		this.theCommand = theCommand;
 	}
 
-	public void changeLayout()
-	{
+	public void changeLayout() {
 
 		invalidate();
 		removeAll();
@@ -135,32 +133,32 @@ public class ControlButtons extends JPanel {
 			add(changeLayout);
 			break;
 
-		case 1:	
-			layoutType = new GridLayout(2,1);
+		case 1:
+			layoutType = new GridLayout(2, 1);
 			setLayout(layoutType);
 			add(st_but);
 			add(st_pse);
 			add(st_save);
-			add(st_load);  
+			add(st_load);
 			add(st_undo);
 			add(st_replay);
-			add(changeLayout);   
+			add(changeLayout);
 			break;
 
 		case 2:
 			layoutType = new BorderLayout();
 			setLayout(layoutType);
-			add(st_but,BorderLayout.WEST);
-			add(st_save,BorderLayout.EAST);
+			add(st_but, BorderLayout.WEST);
+			add(st_save, BorderLayout.EAST);
 
 			JPanel cPanel = new JPanel();
 			cPanel.setLayout(new BorderLayout());
-			cPanel.add(st_pse,BorderLayout.NORTH); 
-			cPanel.add(st_load,BorderLayout.WEST);
-			cPanel.add(st_undo,BorderLayout.EAST); 
-			cPanel.add(st_replay,BorderLayout.SOUTH);
-			cPanel.add(changeLayout,BorderLayout.CENTER);
-			add(cPanel,BorderLayout.CENTER);
+			cPanel.add(st_pse, BorderLayout.NORTH);
+			cPanel.add(st_load, BorderLayout.WEST);
+			cPanel.add(st_undo, BorderLayout.EAST);
+			cPanel.add(st_replay, BorderLayout.SOUTH);
+			cPanel.add(changeLayout, BorderLayout.CENTER);
+			add(cPanel, BorderLayout.CENTER);
 			break;
 		}
 		validate();
@@ -199,8 +197,9 @@ public class ControlButtons extends JPanel {
 
 		loadFromFile = new LoadFromFile();
 		saveLogic = new SaveLogic();
-		
-		st_load.setSize(new Dimension(changeLayout.getWidth(),changeLayout.getHeight()));
+
+		st_load.setSize(new Dimension(changeLayout.getWidth(), changeLayout
+				.getHeight()));
 		st_but.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
@@ -214,19 +213,23 @@ public class ControlButtons extends JPanel {
 					st_but.setText("Start");
 					st_pse.setText("Pause");
 					timerObs.getTimer().stop();
-					timerObs = new TimerObservable();
-					setTimerObs(timerObs);
-					timerObs.addObserver((Observer) gameDriver.getGameBoard());
-					timerObs.addObserver((Observer) gameDriver
-							.getDisplayClock());
+					/*
+					 * timerObs = new TimerObservable();
+					 * timerObs.addObserver((Observer)
+					 * gameDriver.getGameBoard());
+					 * timerObs.addObserver((Observer) gameDriver
+					 * .getDisplayClock()); setTimerObs(timerObs);
+					 */
+
 				}
 
 				else if (st_but.getText().equals("Start")) {
 					StartCommand startCmd;
-					startCmd = new StartCommand(timerObs);
+					timerObs = new TimerObservable();
 					timerObs.addObserver((Observer) gameDriver.getGameBoard());
 					timerObs.addObserver((Observer) gameDriver
 							.getDisplayClock());
+					startCmd = new StartCommand(timerObs);
 					setTheCommand(startCmd);
 					press();
 					st_but.setText("Restart");
@@ -240,7 +243,7 @@ public class ControlButtons extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				st_but.setEnabled(true);
-				
+
 				game.requestFocusInWindow();
 
 				if (st_pse.getText().equals("Pause")) {
@@ -295,10 +298,10 @@ public class ControlButtons extends JPanel {
 				st_replay.setEnabled(true);
 				isStart = false;
 				ReplayCommand replyCmd;
-				replyCmd = new ReplayCommand(timerObs);
 				timerObs.addObserver((Observer) gameDriver.getGameBoard());
-				timerObs.addObserver((Observer) gameDriver
-						.getDisplayClock());
+				timerObs.addObserver((Observer) gameDriver.getDisplayClock());
+				replyCmd = new ReplayCommand(timerObs);
+
 				setTheCommand(replyCmd);
 				press();
 
@@ -314,7 +317,7 @@ public class ControlButtons extends JPanel {
 				st_undo.setEnabled(false);
 				st_replay.setEnabled(true);
 				st_save.setEnabled(false);
-				
+
 				PauseCommand pauseCmd;
 				pauseCmd = new PauseCommand(timerObs);
 				timerObs.deleteObserver((Observer) gameDriver.getGameBoard());
@@ -323,7 +326,7 @@ public class ControlButtons extends JPanel {
 				gameDriver.getControlButtons().press();
 
 				saveUsingExplorer();
-				
+
 				// save logic.
 				SaveCommand saveCommand;
 				saveCommand = new SaveCommand(timerObs);
@@ -331,27 +334,27 @@ public class ControlButtons extends JPanel {
 				press();
 
 			}
-			
+
 			private void saveUsingExplorer() {
 				// TODO Auto-generated method stub
-				String newFileName="";
-				String newDirectoryname="";
+				String newFileName = "";
+				String newDirectoryname = "";
 				JFileChooser c = new JFileChooser();
-                int rVal = c.showSaveDialog(gameDriver);	
-                
-                if (rVal == JFileChooser.APPROVE_OPTION) {
-					newFileName= c.getSelectedFile().getName();
-					newDirectoryname=c.getCurrentDirectory().toString();
+				int rVal = c.showSaveDialog(gameDriver);
+
+				if (rVal == JFileChooser.APPROVE_OPTION) {
+					newFileName = c.getSelectedFile().getName();
+					newDirectoryname = c.getCurrentDirectory().toString();
 				}
 				if (rVal == JFileChooser.CANCEL_OPTION) {
-					newFileName="You pressed cancel";
-					newDirectoryname="";
+					newFileName = "You pressed cancel";
+					newDirectoryname = "";
 				}
-				String modifiedfileName = (newDirectoryname+"\\"+newFileName).replace("\\", "\\\\");
+				String modifiedfileName = (newDirectoryname + "\\" + newFileName)
+						.replace("\\", "\\\\");
 				saveLogic.setFileName(modifiedfileName);
 				timerObs.setSaveLogic(saveLogic);
-				System.out.println("file during save :"+modifiedfileName);
-
+				System.out.println("file during save :" + modifiedfileName);
 
 			}
 
@@ -378,34 +381,33 @@ public class ControlButtons extends JPanel {
 				LoadCommand loadCommand;
 				loadCommand = new LoadCommand(timerObs);
 				timerObs.addObserver((Observer) gameDriver.getGameBoard());
-				timerObs.addObserver((Observer) gameDriver
-						.getDisplayClock());
+				timerObs.addObserver((Observer) gameDriver.getDisplayClock());
 				setTheCommand(loadCommand);
 				press();
 				game.setLoadGameFlag(3);
 
 				game.requestFocusInWindow();
 			}
-			
+
 			private void loadFromExplorer() {
 				// TODO Auto-generated method stub
-				String loadedFileName="";
-				String loadedDirectoryname="";
+				String loadedFileName = "";
+				String loadedDirectoryname = "";
 				JFileChooser c = new JFileChooser();
 				int rVal = c.showOpenDialog(gameDriver);
 				if (rVal == JFileChooser.APPROVE_OPTION) {
-					loadedFileName= c.getSelectedFile().getName();
-					loadedDirectoryname=c.getCurrentDirectory().toString();
+					loadedFileName = c.getSelectedFile().getName();
+					loadedDirectoryname = c.getCurrentDirectory().toString();
 				}
 				if (rVal == JFileChooser.CANCEL_OPTION) {
-					loadedFileName="You pressed cancel";
-					loadedDirectoryname="";
+					loadedFileName = "You pressed cancel";
+					loadedDirectoryname = "";
 				}
-				String modifiedfileName = (loadedDirectoryname+"\\"+loadedFileName).replace("\\", "\\\\");
+				String modifiedfileName = (loadedDirectoryname + "\\" + loadedFileName)
+						.replace("\\", "\\\\");
 				loadFromFile.setFileName(modifiedfileName);
 				timerObs.setLoadFromFile(loadFromFile);
-				System.out.println("file :"+modifiedfileName);
-
+				System.out.println("file :" + modifiedfileName);
 
 			}
 		});
@@ -414,12 +416,13 @@ public class ControlButtons extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				layoutState ++;
+				layoutState++;
 
-				if(layoutState >=3)
+				if (layoutState >= 3)
 					layoutState = 0;
 
-				ChangeLayoutCommand changeLayoutCommand = new ChangeLayoutCommand(gameDriver.getControlButtons());
+				ChangeLayoutCommand changeLayoutCommand = new ChangeLayoutCommand(
+						gameDriver.getControlButtons());
 				setTheCommand(changeLayoutCommand);
 				press();
 
