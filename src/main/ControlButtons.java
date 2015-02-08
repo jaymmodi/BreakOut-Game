@@ -221,8 +221,8 @@ public class ControlButtons extends JPanel {
 					timerObs.addObserver((Observer) gameDriver.getGameBoard());
 					timerObs.addObserver((Observer) gameDriver
 							.getDisplayClock());
-					gameDriver.getControlButtons().setTheCommand(startCmd);
-					gameDriver.getControlButtons().press();
+					setTheCommand(startCmd);
+					press();
 					st_but.setText("Restart");
 				}
 			}
@@ -235,14 +235,6 @@ public class ControlButtons extends JPanel {
 			public void actionPerformed(ActionEvent ae) {
 				st_but.setEnabled(true);
 				game.requestFocusInWindow();
-				/*if (timerObs.getComputeCoordinatesObj().getGameFlag() == 2) {
-					st_but.setEnabled(true);
-					st_pse.setEnabled(false);
-					st_undo.setEnabled(false);
-					st_replay.setEnabled(false);
-					timerObs.getTimer().stop();
-					timerObs.deleteObservers();
-				}*/
 
 				if (st_pse.getText().equals("Pause")) {
 					PauseCommand pauseCmd;
@@ -260,8 +252,8 @@ public class ControlButtons extends JPanel {
 					timerObs.addObserver((Observer) gameDriver.getGameBoard());
 					timerObs.addObserver((Observer) gameDriver
 							.getDisplayClock());
-					gameDriver.getControlButtons().setTheCommand(resumeCmd);
-					gameDriver.getControlButtons().press();
+					setTheCommand(resumeCmd);
+					press();
 					game.requestFocusInWindow();
 					st_pse.setText("Pause");
 				}
@@ -279,8 +271,8 @@ public class ControlButtons extends JPanel {
 				isStart = false;
 				UndoCommand undoCmd;
 				undoCmd = new UndoCommand(timerObs);
-				gameDriver.getControlButtons().setTheCommand(undoCmd);
-				gameDriver.getControlButtons().press();
+				setTheCommand(undoCmd);
+				press();
 			}
 		});
 
@@ -291,17 +283,15 @@ public class ControlButtons extends JPanel {
 				st_pse.setText("Resume");
 				st_pse.setEnabled(true);
 				st_undo.setEnabled(false);
-				st_replay.setEnabled(false);
+				st_replay.setEnabled(true);
 				isStart = false;
 				ReplayCommand replyCmd;
 				replyCmd = new ReplayCommand(timerObs);
 				timerObs.addObserver((Observer) gameDriver.getGameBoard());
 				timerObs.addObserver((Observer) gameDriver
 						.getDisplayClock());
-				gameDriver.getControlButtons().setTheCommand(replyCmd);
-				gameDriver.getControlButtons().press();
-				st_undo.setEnabled(true);
-				st_replay.setEnabled(true);
+				setTheCommand(replyCmd);
+				press();
 
 			}
 		});
@@ -326,8 +316,8 @@ public class ControlButtons extends JPanel {
 				// save logic.
 				SaveCommand saveCommand;
 				saveCommand = new SaveCommand(timerObs);
-				gameDriver.getControlButtons().setTheCommand(saveCommand);
-				gameDriver.getControlButtons().press();
+				setTheCommand(saveCommand);
+				press();
 
 			}
 		});
@@ -335,24 +325,26 @@ public class ControlButtons extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				st_but.setText("Restart");
 				st_but.setEnabled(true);
 				st_pse.setText("Resume");
 				st_pse.setEnabled(true);
-				st_undo.setEnabled(false);
+				st_undo.setEnabled(true);
 				st_replay.setEnabled(true);
 				st_save.setEnabled(false);
 				st_load.setEnabled(true);
 				// TODO Auto-generated method stub
 				// load
+				timerObs.getTimer().stop();
 				LoadCommand loadCommand;
 				loadCommand = new LoadCommand(timerObs);
 				timerObs.addObserver((Observer) gameDriver.getGameBoard());
 				timerObs.addObserver((Observer) gameDriver
 						.getDisplayClock());
-				gameDriver.getControlButtons().setTheCommand(loadCommand);
-				gameDriver.getControlButtons().press();
+				setTheCommand(loadCommand);
+				press();
 				game.setLoadGameFlag(3);
-
+				game.requestFocusInWindow();
 
 			}
 		});
@@ -370,7 +362,6 @@ public class ControlButtons extends JPanel {
 				setTheCommand(changeLayoutCommand);
 				press();
 
-				System.out.println(layoutState);
 			}
 		});
 

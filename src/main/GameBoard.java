@@ -112,7 +112,8 @@ public class GameBoard extends JPanel implements Constants, Observer {
 
 	public void paint(Graphics g) {
 		super.paint(g);
-		if (this.getLoadGameFlag() == 3) {
+		//checks if the game is loaded or game is not over
+		if (this.getLoadGameFlag() == 3 && this.getGameFlag() != 2) {
 			g.drawImage(ball.getImage(), ball.getX(), ball.getY(),
 					ball.getWidth(), ball.getHeight(), this);
 			g.drawImage(paddle.getImage(), paddle.getX(), paddle.getY(),

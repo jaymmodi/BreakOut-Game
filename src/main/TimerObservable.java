@@ -95,29 +95,21 @@ public class TimerObservable extends Observable {
 
 	public TimerObservable() {
 		this.computeCoordinatesObj = new ComputeCoordinates();
-		this.timer = new Timer(5, null);
+		this.timer = new Timer(10, null);
 		this.replayFrameCounter = 0;
 
 	}
-
-	ArrayList<Object> test = new ArrayList<Object>();
 
 	public void computeAndNotify() {
 		timer.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				if (getComputeCoordinatesObj().getGameFlag() == 2) {
-					deleteObservers();
-					getTimer().stop();
-				}
 				if (gameFlag) {
 					if (count % 10 == 0) {
 						CommandHistoryList.add(getComputeCoordinatesObj()
 								.gameData());
 					}
-					// CommandHistoryList.add(getComputeCoordinatesObj().gameData());
-
 					ReplayList.add(getComputeCoordinatesObj().gameData());
 					getComputeCoordinatesObj().performGameMovement();
 					getComputeCoordinatesObj().updateDisplayClock();
@@ -149,22 +141,23 @@ public class TimerObservable extends Observable {
 				}
 			}
 		});
-		timer.setDelay(5);
+		timer.setDelay(10);
 		timer.restart();
 		setReplayList(ReplayList);
-
 	}
 
 	public void undoTesting() {
 		this.timer.stop();
+		System.out.println(CommandHistoryList);
 		if (CommandHistoryList.size() != 0) {
 			StoreDimensions storeDimensions = (StoreDimensions) this.CommandHistoryList
 					.removeLast();
+			System.out.println(storeDimensions.ballX);
+			System.out.println(CommandHistoryList.size());
 
 			getComputeCoordinatesObj().saveDimensions(storeDimensions);
-			// ReplayList.add(getComputeCoordinatesObj().gameData());
 			ReplayList.add(storeDimensions);
-			shapeObjects = getComputeCoordinatesObj().getUndoObjects();
+			shapeObjects = getComputeCoordinatesObj().getListShapeObjects();
 			setChanged();
 			notifyObservers(shapeObjects);
 		}
@@ -178,7 +171,7 @@ public class TimerObservable extends Observable {
 		if (isLoadGame()) {
 			computeAndNotify();
 		}
-		this.getTimer().setDelay(5);
+		this.getTimer().setDelay(10);
 		this.getTimer().restart();
 	}
 
@@ -186,7 +179,6 @@ public class TimerObservable extends Observable {
 		// TODO Auto-generated method stub
 		saveLogic = new SaveLogic(ReplayList);
 		saveLogic.save();
-
 	}
 
 	public void loadGame() {
@@ -199,17 +191,12 @@ public class TimerObservable extends Observable {
 		setReplayList(list); // setting replay list for replay after load.
 		setCommandHistoryList(list); // setting command list for undo after
 										// load.
+
 		storeDimensions = (StoreDimensions) list.get(list.size() - 1);
 		getComputeCoordinatesObj().saveDimensions(storeDimensions);
 		setChanged();
 		shapeObjects = getComputeCoordinatesObj().getListShapeObjects();
 		setChanged();
 		notifyObservers(shapeObjects);
-
-	}
-
-	public void changeLayout() {
-		// TODO Auto-generated method stub
-		// currentLayout = new FlowLayoutManager();
 	}
 }

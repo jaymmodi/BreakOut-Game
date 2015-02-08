@@ -171,12 +171,11 @@ public class ComputeCoordinates implements Constants {
 		currentMinute = -1;
 		currentSecond = 0;
 		timeForDisplayClock = "00:00";
-
+		timerTracker = 0;
 	}
 
 	public String updateDisplayClock() {
 		// TODO Auto-generated method stub
-		// System.out.println(" in update of Display Clock");
 		timerTracker++;
 		if (timerTracker >= 100) {
 			if (currentSecond == 60) {
