@@ -371,9 +371,10 @@ public class ControlButtons extends JPanel {
 				// TODO Auto-generated method stub
 				// load
 
+				timerObs.getTimer().stop();
+				
 				loadFromExplorer();
 
-				timerObs.getTimer().stop();
 				LoadCommand loadCommand;
 				loadCommand = new LoadCommand(timerObs);
 				timerObs.addObserver((Observer) gameDriver.getGameBoard());
