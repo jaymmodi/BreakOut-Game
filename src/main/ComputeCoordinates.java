@@ -17,6 +17,7 @@ public class ComputeCoordinates implements Constants {
 	private int currentSecond, currentMinute;
 	private String timeForDisplayClock;
 	int timerTracker = 0;
+	private int layoutState = 0;
 
 	public int getCurrentSecond() {
 		return currentSecond;
@@ -116,6 +117,7 @@ public class ComputeCoordinates implements Constants {
 		listObjects.add(this.getBricks());
 		listObjects.add(this.getPaddle());
 		listObjects.add(this.timeForDisplayClock);
+		listObjects.add(this.getLayoutState());
 		return listObjects;
 	}
 
@@ -131,7 +133,7 @@ public class ComputeCoordinates implements Constants {
 		StoreDimensions obj = new StoreDimensions(this.getBall().getX(), this
 				.getBall().getY(), this.getPaddle().getX(), this.getPaddle()
 				.getY(), this.getGameFlag(), this.getTimeForDisplayClock(),
-				this.getBrickFlags());
+				this.getBrickFlags(), this.getLayoutState());
 		return obj;
 	}
 
@@ -142,7 +144,8 @@ public class ComputeCoordinates implements Constants {
 		getPaddle().setX(obj.paddleX);
 		setGameFlag(obj.getGameFlag());
 		setTimeForDisplayClock(obj.getSetTimeForDisplayClock());
-
+		setLayoutState(obj.getLayoutState());
+		
 		ArrayList<Boolean> getBrickFlags = obj.getIsBrickDestroyed();
 
 		for (int i = 0; i < TOTAL_BRICKS; i++) {
@@ -259,6 +262,14 @@ public class ComputeCoordinates implements Constants {
 				}
 			}
 		}
+	}
+
+	public int getLayoutState() {
+		return layoutState;
+	}
+
+	public void setLayoutState(int layoutState) {
+		this.layoutState = layoutState;
 	}
 
 }

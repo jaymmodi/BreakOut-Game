@@ -25,7 +25,16 @@ public class StoreDimensions implements Serializable {
 	ArrayList<Integer> brickY;
 	int gameFlag;
 	String setTimeForDisplayClock;
+	int layoutState;
 	
+	public int getLayoutState() {
+		return layoutState;
+	}
+
+	public void setLayoutState(int layoutState) {
+		this.layoutState = layoutState;
+	}
+
 	public int getGameFlag() {
 		return gameFlag;
 	}
@@ -42,7 +51,7 @@ public class StoreDimensions implements Serializable {
 		this.setTimeForDisplayClock = setTimeForDisplayClock;
 	}
 
-	StoreDimensions(int ballX, int ballY, int paddleX, int paddleY,int gameFlag,String timeForDisplayClock, ArrayList<Boolean> isBrickDestroyed)
+	StoreDimensions(int ballX, int ballY, int paddleX, int paddleY,int gameFlag,String timeForDisplayClock, ArrayList<Boolean> isBrickDestroyed, int layoutState)
 	{ 
 		this.ballX= ballX;
 		this.ballY=ballY;
@@ -51,6 +60,7 @@ public class StoreDimensions implements Serializable {
 		this.isBrickDestroyed = isBrickDestroyed;
 		setGameFlag(gameFlag);
 		setSetTimeForDisplayClock(timeForDisplayClock);
+		setLayoutState(layoutState);
 	}
 
 	public int getBallX() {
