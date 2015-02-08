@@ -209,8 +209,8 @@ public class ControlButtons extends JPanel implements Observer {
 				st_replay.setEnabled(true);
 				st_save.setEnabled(true);
 				game.requestFocusInWindow();
-				
-				
+
+
 				if (st_but.getText().equals("Restart")) {
 					st_but.setText("Start");
 					st_pse.setText("Pause");
@@ -222,7 +222,7 @@ public class ControlButtons extends JPanel implements Observer {
 					timerObs.addObserver((Observer) gameDriver
 							.getDisplayClock());
 					timerObs.deleteObserver((Observer)gameDriver.getControlButtons());
-					*/
+					 */
 
 					/*
 					 * timerObs = new TimerObservable();
@@ -237,14 +237,14 @@ public class ControlButtons extends JPanel implements Observer {
 				else if (st_but.getText().equals("Start")) {
 					StartCommand startCmd;
 					timerObs = new TimerObservable();
-					
-					
+
+
 					timerObs.addObserver((Observer) gameDriver.getGameBoard());
 					timerObs.addObserver((Observer) gameDriver
 							.getDisplayClock());
 
 					timerObs.deleteObserver((Observer)gameDriver.getControlButtons());
-					
+
 
 					startCmd = new StartCommand(timerObs);
 					setTheCommand(startCmd);
@@ -273,13 +273,14 @@ public class ControlButtons extends JPanel implements Observer {
 					timerObs.deleteObserver((Observer) gameDriver
 							.getDisplayClock());
 					timerObs.deleteObserver((Observer)gameDriver.getControlButtons());
-					
+
 					gameDriver.getControlButtons().setTheCommand(pauseCmd);
 					gameDriver.getControlButtons().press();
 					st_pse.setText("Resume");
 				} else {
 					st_undo.setEnabled(true);
 					changeLayout.setEnabled(true);
+					st_save.setEnabled(true);
 					ResumeCommand resumeCmd;
 					resumeCmd = new ResumeCommand(timerObs);
 					timerObs.addObserver((Observer) gameDriver.getGameBoard());
@@ -322,7 +323,7 @@ public class ControlButtons extends JPanel implements Observer {
 				st_replay.setEnabled(true);
 				isStart = false;
 				ReplayCommand replyCmd;
-				
+
 				timerObs.addObserver((Observer) gameDriver.getGameBoard());
 				timerObs.addObserver((Observer) gameDriver.getDisplayClock());
 
@@ -405,11 +406,14 @@ public class ControlButtons extends JPanel implements Observer {
 				// load
 
 				changeLayout.setEnabled(true);
-			
 
 
-				timerObs.getTimer().stop();
-				
+				if(timerObs!=null)
+					timerObs.getTimer().stop();
+
+				if(timerObs == null)
+					timerObs = new TimerObservable();
+					
 				loadFromExplorer();
 
 				LoadCommand loadCommand;
@@ -474,12 +478,12 @@ public class ControlButtons extends JPanel implements Observer {
 		// TODO Auto-generated method stub
 		// extract layoutstate from obj and set it
 		// call changelayout method
-		 if(((ArrayList<?>)objList).get(((ArrayList<?>)objList).size()-1) instanceof Number)
-		 {
-			 setLayoutState((Integer)((ArrayList<?>)objList).get(((ArrayList<?>)objList).size()-1));
-			 changeLayout();
-		 }
-		
+		if(((ArrayList<?>)objList).get(((ArrayList<?>)objList).size()-1) instanceof Number)
+		{
+			setLayoutState((Integer)((ArrayList<?>)objList).get(((ArrayList<?>)objList).size()-1));
+			changeLayout();
+		}
+
 	}
 
 	public int getLayoutState() {
