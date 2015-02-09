@@ -34,7 +34,7 @@
 	<property name="dist.tests.dir" value="${dist}/tests" />
 	<property name="tests.data.dir" value="${dist.tests.dir}/data" />
 	<property name="tests.classes.instr.dir" value="${dist.tests.dir}/classes-instr" />
-	<property name="tests.includes" value="ComputeCoordinatesTest.class,LoadFromFileTest.class" />
+	<property name="tests.includes" value="**/*Tester.class,**/*Test.class,**/*TestCase.class" />
 
 	<condition property="awt.toolkit.property" value="awt.toolkit">
 		<isset property="awt.toolkit" />
