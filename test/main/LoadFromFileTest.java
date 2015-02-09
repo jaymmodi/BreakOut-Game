@@ -11,8 +11,6 @@ import java.util.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sun.org.apache.xpath.internal.operations.String;
-
 public class LoadFromFileTest {
 
 	LoadFromFile loadFromFile;
