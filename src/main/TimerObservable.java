@@ -187,12 +187,18 @@ public class TimerObservable extends Observable {
 
 	public void pauseGame() {
 		this.getTimer().stop();
+
 	}
 
 	public void resumeGame() {
 		if (isLoadGame()) {
 			computeAndNotify();
 		}
+		
+		String updatedTime = (String) getComputeCoordinatesObj().getListShapeObjects().get(4);
+		getComputeCoordinatesObj().setCurrentMinute(Integer.parseInt(updatedTime.split(":")[0]));
+		getComputeCoordinatesObj().setCurrentSecond(Integer.parseInt(updatedTime.split(":")[1]));
+		
 		this.getTimer().setDelay(5);
 		this.getTimer().restart();
 	}
