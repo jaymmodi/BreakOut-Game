@@ -350,7 +350,6 @@ public class ControlButtons extends JPanel implements Observer {
 						.replace("\\", "\\\\");
 				saveLogic.setFileName(modifiedfileName);
 				timerObs.setSaveLogic(saveLogic);
-				System.out.println("file during save :" + modifiedfileName);
 			}
 
 		});
@@ -401,7 +400,6 @@ public class ControlButtons extends JPanel implements Observer {
 						.replace("\\", "\\\\");
 				loadFromFile.setFileName(modifiedfileName);
 				timerObs.setLoadFromFile(loadFromFile);
-				System.out.println("file :" + modifiedfileName);
 
 			}
 		});

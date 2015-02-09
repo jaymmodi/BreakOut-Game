@@ -62,7 +62,6 @@ public class LoadFromFile {
 			loadedList = (LinkedList<Object>) objectInputStream.readObject();
 			objectInputStream.close();
 			fileInputStream.close();
-			System.out.println(loadedList.size());
 		} catch (FileNotFoundException e) {
 			System.out.println("File Not Found Exception");
 		} catch (ClassNotFoundException e) {

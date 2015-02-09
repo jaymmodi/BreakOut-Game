@@ -32,13 +32,11 @@ public class DisplayClock implements Observer {
 	}
 
 	/*
-	 * Method - depending on the object received it updates itselfs.
+	 * Method - depending on the object received it updates itself.
 	 */
 	@Override
 	public void update(Observable o, Object objList) {
-		if (objList instanceof LinkedList<?>) {
-			System.out.println("testing");
-		} else {
+		if (!(objList instanceof LinkedList<?>)) {
 			ArrayList<Object> obj = (ArrayList<Object>) objList;
 			if (obj.get(0) instanceof Number
 					&& ((Integer) obj.get(0)).intValue() == 2)

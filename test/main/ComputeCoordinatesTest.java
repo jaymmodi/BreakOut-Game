@@ -17,30 +17,19 @@ public class ComputeCoordinatesTest {
 	}
 
 	@Test
-	public void testGetUndoObjects() {
-
-		ArrayList<Object> testList = computeCoordinates.getUndoObjects();
-		assertNotNull(testList);
-
-	}
-
-	@Test
 	public void testGetListShapeObjects() {
-		// fail("Not yet implemented");
 		ArrayList<Object> testlist = computeCoordinates.getListShapeObjects();
-		//assertNotNull(testlist);
+		assertNotNull(testlist);
 	}
 
 	@Test
 	public void testGetBrickFlags() {
-		// fail("Not yet implemented");
 		ArrayList<Boolean> booleanList = computeCoordinates.getBrickFlags();
 		assertNotNull(booleanList);
 	}
 
 	@Test
 	public void testUpdateDisplayClock() {
-		// fail("Not yet implemented");
 
 		String expected = "00:55";
 		computeCoordinates.setTimerTracker(120);
@@ -53,7 +42,6 @@ public class ComputeCoordinatesTest {
 
 	@Test
 	public void testGameData() {
-		// fail("Not yet implemented");
 		StoreDimensions testDimensions = computeCoordinates.gameData();
 		assertNotNull(testDimensions);
 
