@@ -11,9 +11,10 @@ import javax.swing.Timer;
 import java.util.LinkedList;
 
 /**
- * 
- * @author
- *
+ * Class TimerObservable - this class acts as the observable for
+ * Observers(Gameboard and DigitalClock) This class notifies its observers to
+ * change its state. This class communicates with several different classes to
+ * get the changes required for the observers.
  */
 
 public class TimerObservable extends Observable {
@@ -21,20 +22,18 @@ public class TimerObservable extends Observable {
 	private ComputeCoordinates computeCoordinatesObj;
 	private Timer timer;
 	private LinkedList<Object> CommandHistoryList = new LinkedList<Object>();
-	private boolean loadGame; // need this to resume game after load.
-
-	
-
-	boolean gameFlag = true;
+	private boolean loadGame;
+	private boolean gameFlag = true;
 	private int replayFrameCounter;
-	int count = 0;
-
+	private int count = 0;
 	private SaveLogic saveLogic;
 	private LoadFromFile loadFromFile;
-
 	private LinkedList<Object> ReplayList = new LinkedList<Object>();
 	private ArrayList<Object> shapeObjects;
 
+	/*
+	 * @returns a boolean value to check if the game is in load state
+	 */
 	public boolean isLoadGame() {
 		return loadGame;
 	}
@@ -43,6 +42,9 @@ public class TimerObservable extends Observable {
 		this.loadGame = loadGame;
 	}
 
+	/*
+	 * @returns a command history list for undo
+	 */
 	public LinkedList<Object> getCommandHistoryList() {
 		return CommandHistoryList;
 	}
@@ -51,6 +53,9 @@ public class TimerObservable extends Observable {
 		CommandHistoryList = commandHistoryList;
 	}
 
+	/*
+	 * @returns a replay list
+	 */
 	public LinkedList<Object> getReplayList() {
 		return ReplayList;
 	}
@@ -59,6 +64,9 @@ public class TimerObservable extends Observable {
 		ReplayList = replayList;
 	}
 
+	/*
+	 * @returns a reference to load from file class
+	 */
 	public LoadFromFile getLoadFromFile() {
 		return loadFromFile;
 	}
@@ -67,10 +75,16 @@ public class TimerObservable extends Observable {
 		this.loadFromFile = loadFromFile;
 	}
 
+	/*
+	 * @returns a reference to savelogic
+	 */
 	public SaveLogic getSaveLogic() {
 		return saveLogic;
 	}
 
+	/*
+	 * @returns a game flag variable
+	 */
 	public boolean isGameFlag() {
 		return gameFlag;
 	}
@@ -79,10 +93,9 @@ public class TimerObservable extends Observable {
 		this.gameFlag = gameFlag;
 	}
 
-	public LinkedList<Object> getHistoricCommandList() {
-		return CommandHistoryList;
-	}
-
+	/*
+	 * @returns a list of shapeObjects
+	 */
 	public ArrayList<Object> getShapeObjects() {
 		return shapeObjects;
 	}
@@ -91,6 +104,9 @@ public class TimerObservable extends Observable {
 		this.shapeObjects = shapeObjects;
 	}
 
+	/*
+	 * @returns a reference to compute Coordinates class
+	 */
 	public ComputeCoordinates getComputeCoordinatesObj() {
 		return computeCoordinatesObj;
 	}
@@ -100,6 +116,9 @@ public class TimerObservable extends Observable {
 		this.computeCoordinatesObj = computeCoordinatesObj;
 	}
 
+	/*
+	 * @returns a reference to Timer class
+	 */
 	public Timer getTimer() {
 		return timer;
 	}
@@ -114,6 +133,10 @@ public class TimerObservable extends Observable {
 		this.replayFrameCounter = 0;
 	}
 
+	/*
+	 * Method - it computes the latest coordinates and notifies the observers
+	 * for the state change.
+	 */
 	public void computeAndNotify() {
 		timer.addActionListener(new ActionListener() {
 			@Override
@@ -126,7 +149,6 @@ public class TimerObservable extends Observable {
 					ReplayList.add(getComputeCoordinatesObj().gameData());
 					getComputeCoordinatesObj().performGameMovement();
 					getComputeCoordinatesObj().updateDisplayClock();
-					
 					shapeObjects = getComputeCoordinatesObj()
 							.getListShapeObjects();
 					setChanged();
@@ -154,8 +176,7 @@ public class TimerObservable extends Observable {
 					}
 				}
 
-				if(getComputeCoordinatesObj().getGameFlag() == 2)
-				{
+				if (getComputeCoordinatesObj().getGameFlag() == 2) {
 					deleteObservers();
 					timer.stop();
 				}
@@ -166,16 +187,15 @@ public class TimerObservable extends Observable {
 		setReplayList(ReplayList);
 	}
 
+	/*
+	 * Method - it removes the last object from the list for the undo
+	 * functionality
+	 */
 	public void undoTesting() {
 		this.timer.stop();
-		System.out.println(CommandHistoryList);
 		if (CommandHistoryList.size() != 0) {
-
 			StoreDimensions storeDimensions = (StoreDimensions) this.CommandHistoryList
 					.removeLast();
-			System.out.println(storeDimensions.ballX);
-			System.out.println(CommandHistoryList.size());
-
 			getComputeCoordinatesObj().saveDimensions(storeDimensions);
 			ReplayList.add(storeDimensions);
 			this.CommandHistoryList.removeLast();
@@ -185,10 +205,16 @@ public class TimerObservable extends Observable {
 		}
 	}
 
+	/*
+	 * Method - stops the timer
+	 */
 	public void pauseGame() {
 		this.getTimer().stop();
 	}
 
+	/*
+	 * Method - restarts the timer
+	 */
 	public void resumeGame() {
 		if (isLoadGame()) {
 			computeAndNotify();
@@ -197,22 +223,23 @@ public class TimerObservable extends Observable {
 		this.getTimer().restart();
 	}
 
+	/*
+	 * Method - sends replay list to saveLogic class to save it in a file
+	 */
 	public void saveGame() {
-		// TODO Auto-generated method stub
 		saveLogic.setListToSave(ReplayList);
 		saveLogic.save();
 	}
 
+	/*
+	 * Method - loads the game from one of the saved instance.
+	 */
 	public void loadGame() {
-		// TODO Auto-generated method stub
 		setLoadGame(true);
 		StoreDimensions storeDimensions;
-
-
 		LinkedList<Object> list = loadFromFile.load();
-		setReplayList(list); // setting replay list for replay after load.
-		setCommandHistoryList(list); // setting command list for undo after load.
-
+		setReplayList(list);
+		setCommandHistoryList(list);
 		storeDimensions = (StoreDimensions) list.get(list.size() - 1);
 		getComputeCoordinatesObj().saveDimensions(storeDimensions);
 		shapeObjects = getComputeCoordinatesObj().getListShapeObjects();
@@ -221,7 +248,6 @@ public class TimerObservable extends Observable {
 	}
 
 	public void setSaveLogic(SaveLogic saveLogic) {
-		// TODO Auto-generated method stub
 		this.saveLogic = saveLogic;
 	}
 }

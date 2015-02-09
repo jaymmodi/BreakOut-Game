@@ -91,6 +91,7 @@ public class ComputeCoordinates implements Constants {
 		this.setGameFlag(1);
 		gameInit();
 	}
+
 	public ComputeCoordinates(boolean flag) {
 
 		this.ball = new Ball(flag);
@@ -99,16 +100,18 @@ public class ComputeCoordinates implements Constants {
 		this.setGameFlag(1);
 		gameInit(flag);
 	}
+
 	public void gameInit(boolean flag) {
 
 		int k = 0;
 		for (int i = 0; i < Constants.BRICK_ROWS; i++) {
 			for (int j = 0; j < Constants.BRICK_COLUMNS; j++) {
-				bricks[k] = new Brick(j * 40 + 210, i * 10 + 80,false);
+				bricks[k] = new Brick(j * 40 + 210, i * 10 + 80, false);
 				k++;
 			}
 		}
 	}
+
 	public void gameInit() {
 
 		int k = 0;
@@ -157,12 +160,12 @@ public class ComputeCoordinates implements Constants {
 	public void saveDimensions(StoreDimensions obj) {
 		getBall().setX(obj.getBallX());
 		getBall().setY(obj.getBallY());
-		getPaddle().setY(obj.paddleY);
-		getPaddle().setX(obj.paddleX);
+		getPaddle().setY(obj.getPaddleY());
+		getPaddle().setX(obj.getBallX());
 		setGameFlag(obj.getGameFlag());
 		setTimeForDisplayClock(obj.getSetTimeForDisplayClock());
 		setLayoutState(obj.getLayoutState());
-		
+
 		ArrayList<Boolean> getBrickFlags = obj.getIsBrickDestroyed();
 
 		for (int i = 0; i < TOTAL_BRICKS; i++) {

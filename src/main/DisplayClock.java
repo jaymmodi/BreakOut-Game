@@ -12,8 +12,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
+ * Class DisplayClock - this acts as the Observer and updates itself after every
+ * 1 second .
  * 
- * @author
  *
  */
 
@@ -30,19 +31,22 @@ public class DisplayClock implements Observer {
 		jp.setBackground(Color.black);
 	}
 
+	/*
+	 * Method - depending on the object received it updates itselfs.
+	 */
 	@Override
 	public void update(Observable o, Object objList) {
 		if (objList instanceof LinkedList<?>) {
 			System.out.println("testing");
 		} else {
-			for (Object obj : (ArrayList<?>) objList) {
-				if (obj instanceof Number && ((Integer) obj).intValue() == 2)
-					time.setText("00:00");
-				else if (obj instanceof String) {
-					time.setText(obj.toString());
-				}
+			ArrayList<Object> obj = (ArrayList<Object>) objList;
+			if (obj.get(0) instanceof Number
+					&& ((Integer) obj.get(0)).intValue() == 2)
+				time.setText("00:00");
+			else if (obj.get(obj.size() - 2) instanceof String) {
+				time.setText(obj.get(obj.size() - 2).toString());
+
 			}
 		}
 	}
 }
-
