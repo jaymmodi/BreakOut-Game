@@ -35,7 +35,6 @@ public class LoadFromFileTest {
 
 	@Test
 	public void testLoad() {
-		// fail("Not yet implemented");
 		loadFromFile.setFileName("testFile");
 		LinkedList<Object> list = loadFromFile.load();
 		assertNotNull(list);
@@ -45,7 +44,6 @@ public class LoadFromFileTest {
 	@Test(expected = NullPointerException.class)
 	public void testLoadWithException() {
 		LinkedList<Object> list = loadFromFile.load();
-
 	}
 
 }
