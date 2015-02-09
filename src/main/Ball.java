@@ -3,39 +3,52 @@ package main;
 import javax.swing.ImageIcon;
 
 /**
+ * Ball class
  * 
- * @author
- *
+ * Initializes the ball images and initial state. Contains methods which take
+ * care of movement of the ball.
+ * 
+ * move() moves the ball in x and y direction
+ * 
+ * resetState() resets the ball to initial state
+ * 
  */
-
 public class Ball extends Dimensions implements Boundaries {
-	private int xdir;
-	private int ydir;
-	protected String ball_path = "img/fire_ball.png";
-	ImageIcon myImageicon;
+	private int xDirection;
+	private int yDirection;
+	private String ballImageSource = "img/fire_ball.png";
+	private ImageIcon imageIcon;
 
+	/*
+	 * Constructor to initialize ball image and its initial x and y directions
+	 */
 	public Ball() {
-		xdir = 1;
-		ydir = -1;
+		xDirection = 1;
+		yDirection = -1;
 
-		myImageicon = new ImageIcon(getClass().getClassLoader().getResource(
-				ball_path));
+		imageIcon = new ImageIcon(getClass().getClassLoader().getResource(
+				ballImageSource));
 
-		image = myImageicon.getImage();
+		image = imageIcon.getImage();
 
 		width = image.getWidth(null);
 		height = image.getHeight(null);
 		resetState();
 	}
 
+	/*
+	 * Constructor overloaded to create a check for -x11 bamboo test failure
+	 * 
+	 * @param flag flag to bypass -x11 test check
+	 */
 	public Ball(boolean flag) {
-		xdir = 1;
-		ydir = -1;
+		xDirection = 1;
+		yDirection = -1;
 		if (flag) {
-			myImageicon = new ImageIcon(getClass().getClassLoader()
-					.getResource(ball_path));
+			imageIcon = new ImageIcon(getClass().getClassLoader().getResource(
+					ballImageSource));
 
-			image = myImageicon.getImage();
+			image = imageIcon.getImage();
 
 			width = image.getWidth(null);
 			height = image.getHeight(null);
@@ -46,43 +59,61 @@ public class Ball extends Dimensions implements Boundaries {
 		resetState();
 	}
 
+	/*
+	 * Method to set x and y coordinates
+	 */
 	public void move() {
 
-		x += xdir;
-		y += ydir;
+		x += xDirection;
+		y += yDirection;
 
 		if (x == 0) {
-			setXDir(1);
+			setXDirection(1);
 		}
 
-		if (x == Boundaries.BALL_RIGHT) {
-			setXDir(-1);
+		if (x == Boundaries.BALLRIGHT) {
+			setXDirection(-1);
 		}
 
 		if (y == 0) {
-			setYDir(1);
+			setYDirection(1);
 		}
 	}
 
-	public void resetState() {
-		x = Constants.WIN_WIDTH / 2;
+	/*
+	 * Method to reset the state of the ball
+	 */
+	private void resetState() {
+		x = Constants.WINDOWWIDTH / 2;
 		y = 450;
 	}
 
-	public void setXDir(int x) {
-		xdir = x;
+	/*
+	 * @param xDirection Sets the x-direction of the ball
+	 */
+	public void setXDirection(int xDirection) {
+		this.xDirection = xDirection;
 	}
 
-	public int getXDir() {
-		return xdir;
+	/*
+	 * @return returns x-direction of the ball
+	 */
+	public int getXDirection() {
+		return xDirection;
 	}
 
-	public void setYDir(int y) {
-		ydir = y;
+	/*
+	 * @param yDirection Sets the x-direction of the ball
+	 */
+	public void setYDirection(int yDirection) {
+		this.yDirection = yDirection;
 	}
 
-	public int getYDir() {
-		return ydir;
+	/*
+	 * @return returns y-direction of the ball
+	 */
+	public int getYDirection() {
+		return yDirection;
 	}
 
 }

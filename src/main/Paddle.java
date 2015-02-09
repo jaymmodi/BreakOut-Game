@@ -36,11 +36,11 @@ public class Paddle extends Dimensions implements Boundaries {
 
 	public void move() {
 
-		if (x <= Boundaries.PADDLE_LEFT) {
-			x = Boundaries.PADDLE_LEFT;
+		if (x <= Boundaries.PADDLELEFT) {
+			x = Boundaries.PADDLELEFT;
 		}
-		if (x >= Boundaries.PADDLE_RIGHT - width) {
-			x = Boundaries.PADDLE_RIGHT - width;
+		if (x >= Boundaries.PADDLERIGHT - width) {
+			x = Boundaries.PADDLERIGHT - width;
 		}
 		x += dx;
 	}
@@ -68,7 +68,7 @@ public class Paddle extends Dimensions implements Boundaries {
 	}
 
 	public void resetState() {
-		x = (Constants.WIN_WIDTH / 2) - 30;
+		x = (Constants.WINDOWWIDTH / 2) - 30;
 		y = 460;
 	}
 }

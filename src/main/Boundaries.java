@@ -1,18 +1,18 @@
 package main;
 
 /**
- * 
- * @author
+ * Boundaries interface
  *
+ * Initializes constants for boundaries for frame, panels, ball and paddle.
+ * 
  */
-
 
 public interface Boundaries {
 
-    int WIDTH = Constants.WIN_WIDTH;
-    int HEIGHT = Constants.WIN_HEIGHT;
-    int BOTTOM = (Constants.WIN_HEIGHT - 82);
-    int PADDLE_RIGHT = (Constants.WIN_WIDTH-10);
-    int PADDLE_LEFT = 0;
-    int BALL_RIGHT = (Constants.WIN_WIDTH - 22);
+	public static final int WIDTH = Constants.WINDOWWIDTH;
+	public static final int HEIGHT = Constants.WINDOWHEIGHT;
+	public static final int BOTTOM = (Constants.WINDOWHEIGHT - 82);
+	public static final int PADDLERIGHT = (Constants.WINDOWWIDTH - 10);
+	public static final int PADDLELEFT = 0;
+	public static final int BALLRIGHT = (Constants.WINDOWWIDTH - 22);
 }
