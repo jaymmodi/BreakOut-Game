@@ -91,7 +91,24 @@ public class ComputeCoordinates implements Constants {
 		this.setGameFlag(1);
 		gameInit();
 	}
+	public ComputeCoordinates(boolean flag) {
 
+		this.ball = new Ball(flag);
+		this.paddle = new Paddle(flag);
+		this.bricks = new Brick[Constants.TOTAL_BRICKS];
+		this.setGameFlag(1);
+		gameInit(flag);
+	}
+	public void gameInit(boolean flag) {
+
+		int k = 0;
+		for (int i = 0; i < Constants.BRICK_ROWS; i++) {
+			for (int j = 0; j < Constants.BRICK_COLUMNS; j++) {
+				bricks[k] = new Brick(j * 40 + 210, i * 10 + 80,false);
+				k++;
+			}
+		}
+	}
 	public void gameInit() {
 
 		int k = 0;

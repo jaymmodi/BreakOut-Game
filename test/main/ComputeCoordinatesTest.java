@@ -12,7 +12,7 @@ public class ComputeCoordinatesTest {
 
 	@Before
 	public void setUp() throws Exception {
-		computeCoordinates = new ComputeCoordinates();
+		computeCoordinates = new ComputeCoordinates(false);
 
 	}
 

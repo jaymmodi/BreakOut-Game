@@ -9,61 +9,80 @@ import javax.swing.ImageIcon;
  */
 
 public class Ball extends Dimensions implements Boundaries {
-    private int xdir;
-    private int ydir;
-    protected String ball_path = "img/fire_ball.png";
-    ImageIcon myImageicon;
+	private int xdir;
+	private int ydir;
+	protected String ball_path = "img/fire_ball.png";
+	ImageIcon myImageicon;
 
-    public Ball() {
-        xdir = 1;
-        ydir = -1;
+	public Ball() {
+		xdir = 1;
+		ydir = -1;
 
-       myImageicon = new ImageIcon(getClass().getClassLoader().getResource(ball_path));
-                
-        image = myImageicon.getImage();
+		myImageicon = new ImageIcon(getClass().getClassLoader().getResource(
+				ball_path));
 
-        width = image.getWidth(null);
-        height = image.getHeight(null);
-        resetState();
-    }
+		image = myImageicon.getImage();
 
-    public void move() {
+		width = image.getWidth(null);
+		height = image.getHeight(null);
+		resetState();
+	}
 
-        x += xdir;
-        y += ydir;
+	public Ball(boolean flag) {
+		xdir = 1;
+		ydir = -1;
+		if (flag) {
+			myImageicon = new ImageIcon(getClass().getClassLoader()
+					.getResource(ball_path));
 
-        if (x == 0) {
-            setXDir(1);
-        }
+			image = myImageicon.getImage();
 
-        if (x == Boundaries.BALL_RIGHT) {
-            setXDir(-1);
-        }
+			width = image.getWidth(null);
+			height = image.getHeight(null);
+		} else {
+			width = 16;
+			height = 16;
+		}
+		resetState();
+	}
 
-        if (y == 0) {
-            setYDir(1);
-        }
-    }
+	public void move() {
 
-    public void resetState() {
-        x = Constants.WIN_WIDTH / 2;
-        y = 450;
-    }
+		x += xdir;
+		y += ydir;
 
-    public void setXDir(int x) {
-        xdir = x;
-    }
+		if (x == 0) {
+			setXDir(1);
+		}
 
-    public int getXDir() {
-        return xdir;
-    }
+		if (x == Boundaries.BALL_RIGHT) {
+			setXDir(-1);
+		}
 
-    public void setYDir(int y) {
-        ydir = y;
-    }
+		if (y == 0) {
+			setYDir(1);
+		}
+	}
 
-    public int getYDir() {
-        return ydir;
-    }
+	public void resetState() {
+		x = Constants.WIN_WIDTH / 2;
+		y = 450;
+	}
+
+	public void setXDir(int x) {
+		xdir = x;
+	}
+
+	public int getXDir() {
+		return xdir;
+	}
+
+	public void setYDir(int y) {
+		ydir = y;
+	}
+
+	public int getYDir() {
+		return ydir;
+	}
 
 }
